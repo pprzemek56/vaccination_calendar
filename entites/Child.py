@@ -14,7 +14,7 @@ class Child:
     @property
     def birth_date(self):
         return self._birth_date
-    
+
     @birth_date.setter
     def birth_date(self, birth_date):
         self._birth_date = birth_date
