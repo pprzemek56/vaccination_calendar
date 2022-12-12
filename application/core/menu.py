@@ -1,8 +1,8 @@
 from kivy.lang import Builder
-from kivy.uix.screenmanager import Screen
+from kivymd.uix.screen import MDScreen
 
 Builder.load_file("layouts/menu.kv")
 
 
-class Menu(Screen):
+class Menu(MDScreen):
     pass

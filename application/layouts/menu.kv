@@ -1,2 +1,59 @@
 <Menu>:
     name: "menu"
+
+    FitImage:
+        source: "images/bg.png"
+
+    MDBoxLayout:
+        orientation: "vertical"
+        reverse_order:True
+        spacing: "24dp"
+        padding: 20
+
+
+        MDLabel:
+            text: "Szczepienia +"
+            font_size: 32
+            halign: 'center'
+            valign: 'middle'
+            theme_text_color: 'Custom'
+            text_color: (1, 1, 1, 1)
+            font_name: "fonts/static/OpenSans/OpenSans-ExtraBoldItalic.ttf"
+
+
+        MDRoundFlatIconButton:
+            text: "Kalendarz"
+            icon: "calendar"
+            text_color: "white"
+            -width: "200dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+        MDRoundFlatIconButton:
+            text: "Dzieci"
+            icon: "baby-face-outline"
+            text_color: "white"
+            -width: "200dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+        MDRoundFlatIconButton:
+            text: "Szczepienia"
+            icon: "needle"
+            text_color: "white"
+            -width: "200dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+        MDRoundFlatIconButton:
+            text: "Ustawienia"
+            icon: "cog-outline"
+            text_color: "white"
+            -width: "200dp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+
+        MDLabel:
+            text: ""
+
