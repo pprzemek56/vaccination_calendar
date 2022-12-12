@@ -10,7 +10,6 @@
         spacing: "24dp"
         padding: 20
 
-
         MDLabel:
             text: "Szczepienia +"
             font_size: 32
@@ -28,6 +27,9 @@
             -width: "200dp"
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+            on_release:
+                app.root.current = "calendar"
+                root.manager.transition.direction = "left"
 
         MDRoundFlatIconButton:
             text: "Dzieci"
@@ -36,6 +38,9 @@
             -width: "200dp"
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+            on_release:
+                app.root.current = "children"
+                root.manager.transition.direction = "left"
 
         MDRoundFlatIconButton:
             text: "Szczepienia"
@@ -44,6 +49,9 @@
             -width: "200dp"
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+            on_release:
+                app.root.current = "vaccination"
+                root.manager.transition.direction = "left"
 
         MDRoundFlatIconButton:
             text: "Ustawienia"
@@ -52,7 +60,9 @@
             -width: "200dp"
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
             font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
-
+            on_release:
+                app.root.current = "settings"
+                root.manager.transition.direction = "left"
 
         MDLabel:
             text: ""
