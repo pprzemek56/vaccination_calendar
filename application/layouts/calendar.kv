@@ -1,2 +1,52 @@
 <Calendar>:
     name: "calendar"
+
+    MDBottomNavigation:
+        panel_color: "#2e8b2e"
+
+        MDBottomNavigationItem:
+            name: "menu"
+            text: "Menu"
+            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+            icon: "home"
+            on_tab_release:
+                app.root.current = "menu"
+                root.manager.transition.direction = "right"
+
+            FitImage:
+                source: "images/bg.png"
+
+            BoxLayout:
+                GridLayout:
+                    cols: 3
+                    rows: 2
+                    halign: "center"
+                    valign: "middle"
+
+                    MDIconButton:
+                        icon: "chevron-left"
+                        size_hint: .333, .333
+
+                    MDLabel:
+                        id: year_label
+                        size_hint: .333, .333
+                        halign: "center"
+                        valign: "middle"
+
+                    MDIconButton:
+                        icon: "chevron-right"
+                        size_hint: .333, .333
+
+                    MDIconButton:
+                        icon: "chevron-left"
+                        size_hint: .333, .333
+
+                    MDLabel:
+                        id: month_label
+                        size_hint: .333, .333
+                        halign: "center"
+                        valign: "middle"
+
+                    MDIconButton:
+                        icon: "chevron-right"
+                        size_hint: .333, .333
