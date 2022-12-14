@@ -17,11 +17,14 @@
                 source: "images/bg.png"
 
             BoxLayout:
+                orientation: "vertical"
+
                 GridLayout:
                     cols: 3
                     rows: 2
                     halign: "center"
                     valign: "middle"
+                    size_hint: 1, .25
 
                     MDIconButton:
                         icon: "chevron-left"
@@ -50,3 +53,10 @@
                     MDIconButton:
                         icon: "chevron-right"
                         size_hint: .333, .333
+
+                GridLayout:
+                    id: calendar_layout
+                    cols: 7
+                    rows: 7
+                    size_hint: 1, .5
+                    pos_hint: {"center_x": .5}
