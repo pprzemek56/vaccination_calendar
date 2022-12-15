@@ -32,8 +32,7 @@ class Calendar(Screen):
         previous_month = monthcalendar(year - 1 if month == 1 else year, 12 if month == 1 else month - 1)[4]
         next_month = monthcalendar(year + 1 if month == 12 else year, 1 if month == 12 else month + 1)[0]
         calendar = [["pon", "wto", "śrd", "czw", "pią", "sob", "nie"]]
-        print(f"previous month = {previous_month}")
-        print(f"next month = {next_month}")
+
         for i in range(5):
             calendar.append(monthcalendar(year, month)[i])
             if i == 0:
