@@ -4,6 +4,8 @@ from kivy.uix.screenmanager import Screen
 from datetime import date
 from calendar import monthcalendar
 
+from kivymd.uix.button import MDIconButton
+
 month_name = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
               "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"]
 
@@ -16,11 +18,11 @@ class Calendar(Screen):
     def on_enter(self, *args):
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.ids.month_label.text = f"{month_name[self.calendar_date.month - 1].upper()}"
-        print(f"year = {self.calendar_date.year}\n month = {self.calendar_date.month}")
+
         for i in range(6):
             for j in range(7):
                 calendar = self.get_calendar(self.calendar_date.year, self.calendar_date.month)
-                self.ids.calendar_layout.add_widget(Label(text=f"{calendar[i][j]}", size_hint=(.142, .142), color=(0, 0, 0, 1)))
+                self.ids.calendar_layout.add_widget(MDIconButton(icon=f"images/icons/numeric-{calendar[i][j]}.png"))
 
     def month_to_left(self):
         pass

@@ -18,6 +18,7 @@
 
             BoxLayout:
                 orientation: "vertical"
+                # size: self.width, self.height
 
                 GridLayout:
                     cols: 3
@@ -57,6 +58,6 @@
                 GridLayout:
                     id: calendar_layout
                     cols: 7
-                    rows: 7
-                    size_hint: 1, .5
-                    pos_hint: {"center_x": .5}
+                    pos_hint:{"center_x": .5, "center_y": .5}
+
+
