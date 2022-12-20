@@ -22,7 +22,9 @@ class Calendar(Screen):
         for i in range(6):
             for j in range(7):
                 calendar = self.get_calendar(self.calendar_date.year, self.calendar_date.month)
-                self.ids.calendar_layout.add_widget(MDIconButton(icon=f"images/icons/numeric-{calendar[i][j]}.png"))
+                btn = MDIconButton(icon=f"images/icons/numeric-{calendar[i][j]}.png", size_hint=(1, 1))
+                self.ids.calendar_layout.add_widget(btn)
+        print(f"width = {self.ids.calendar_layout.width}, height = {self.ids.calendar_layout.height}")
 
     def month_to_left(self):
         pass
