@@ -18,7 +18,6 @@
 
             BoxLayout:
                 orientation: "vertical"
-                # size: self.width, self.height
 
                 GridLayout:
                     cols: 3
@@ -32,11 +31,11 @@
                         size_hint: .333, .333
                         on_press: root.change_year("left")
 
-                    MDLabel:
+                    MDFlatButton:
                         id: year_label
                         size_hint: .333, .333
-                        halign: "center"
-                        valign: "middle"
+                        on_press: root.set_date()
+
 
                     MDIconButton:
                         icon: "chevron-right"
@@ -48,11 +47,10 @@
                         size_hint: .333, .333
                         on_press: root.change_month("left")
 
-                    MDLabel:
+                    MDFlatButton:
                         id: month_label
                         size_hint: .333, .333
-                        halign: "center"
-                        valign: "middle"
+                        on_press: root.set_date()
 
                     MDIconButton:
                         icon: "chevron-right"

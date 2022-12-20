@@ -4,7 +4,7 @@ from datetime import date
 from calendar import monthcalendar, weekheader
 
 from kivymd.uix.button import MDIconButton
-
+from kivymd.uix.pickers import MDDatePicker
 
 month_name = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
               "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"]
@@ -20,6 +20,17 @@ class Calendar(Screen):
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.ids.month_label.text = f"{month_name[self.calendar_date.month - 1].upper()}"
 
+        self.generate_calendar()
+
+    def set_date(self):
+        date_dialog = MDDatePicker(title="Wybierz datę")
+        date_dialog.bind(on_save=self.save_date)
+        date_dialog.open()
+
+    def save_date(self, instance, value, date_range):
+        self.calendar_date = self.calendar_date.replace(year=value.year, month=value.month, day=value.day)
+        self.ids.year_label.text = f"{self.calendar_date.year}"
+        self.ids.month_label.text = f"{month_name[self.calendar_date.month - 1].upper()}"
         self.generate_calendar()
 
     def generate_calendar(self):
