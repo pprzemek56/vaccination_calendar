@@ -25,11 +25,12 @@
                     rows: 2
                     halign: "center"
                     valign: "middle"
-                    size_hint: 1, .25
+                    size_hint: 1, .05
 
                     MDIconButton:
                         icon: "chevron-left"
                         size_hint: .333, .333
+                        on_press: root.change_year("left")
 
                     MDLabel:
                         id: year_label
@@ -40,10 +41,12 @@
                     MDIconButton:
                         icon: "chevron-right"
                         size_hint: .333, .333
+                        on_press: root.change_year("right")
 
                     MDIconButton:
                         icon: "chevron-left"
                         size_hint: .333, .333
+                        on_press: root.change_month("left")
 
                     MDLabel:
                         id: month_label
@@ -54,6 +57,7 @@
                     MDIconButton:
                         icon: "chevron-right"
                         size_hint: .333, .333
+                        on_press: root.change_month("right")
 
                 GridLayout:
                     id: calendar_layout
@@ -67,5 +71,4 @@
                         # Rectangle:
                             # pos: self.pos
                             # size: self.size
-
 
