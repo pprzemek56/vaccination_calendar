@@ -2,12 +2,14 @@ from kivy.lang import Builder
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen
 from datetime import date
-from calendar import monthcalendar
+from calendar import monthcalendar, weekheader
 
 from kivymd.uix.button import MDIconButton
+from kivymd.uix.label import MDIcon
 
 month_name = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
               "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"]
+
 
 Builder.load_file("layouts/calendar.kv")
 
@@ -19,12 +21,16 @@ class Calendar(Screen):
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.ids.month_label.text = f"{month_name[self.calendar_date.month - 1].upper()}"
 
-        for i in range(6):
+        for weekday in weekheader(3).split(" "):
+            label = MDIconButton(icon=f"images/icons/{weekday}.png", size_hint=(1, 1), disabled=True)
+            self.ids.calendar_layout.add_widget(label)
+
+        for i in range(5):
             for j in range(7):
                 calendar = self.get_calendar(self.calendar_date.year, self.calendar_date.month)
-                btn = MDIconButton(icon=f"images/icons/numeric-{calendar[i][j]}.png", size_hint=(1, 1))
+                btn = MDIconButton(icon=f"images/icons/numeric-{calendar[i + 1][j]}.png", size_hint=(1, 1))
                 self.ids.calendar_layout.add_widget(btn)
-        print(f"width = {self.ids.calendar_layout.width}, height = {self.ids.calendar_layout.height}")
+
 
     def month_to_left(self):
         pass
@@ -42,12 +48,12 @@ class Calendar(Screen):
             if i == 0:
                 for j in range(7):
                     if calendar[i + 1][j] == 0:
-                        calendar[i + 1][j] = previous_month[j]
+                        calendar[i + 1][j] = f"{previous_month[j]}w"
                     else:
                         break
             elif i == 4:
                 for j in range(7):
                     if calendar[i + 1][j] == 0:
-                        calendar[i + 1][j] = next_month[-(7 - j)]
+                        calendar[i + 1][j] = f"{next_month[-(7 - j)]}w"
 
         return calendar
