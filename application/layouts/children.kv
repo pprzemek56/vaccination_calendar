@@ -16,5 +16,44 @@
             FitImage:
                 source: "images/bg.png"
 
+            MDLabel:
+                text: "Szczepienia +"
+                font_size: 32
+                halign: 'center'
+                valign: 'bottom'
+                theme_text_color: 'Custom'
+                text_color: (1, 1, 1, 1)
+                font_name: "fonts/static/OpenSans/OpenSans-ExtraBoldItalic.ttf"
+                pos_hint: {"center_y": .825}
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint: .6, .7
+                pos_hint: {"center_x": .5}
+
+                canvas:
+                    Color:
+                        rgba: (207/255, 138/255, 176/255, .4)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+
+                MDScrollView:
+
+                    MDList:
+                        id: children_list
+
+                        OneLineAvatarIconListItem:
+                            text: "Dodaj dziecko"
+
+                            IconLeftWidget:
+                                icon: "plus"
+
+                        OneLineAvatarIconListItem:
+                            text: "Karol, 30-04-2000"
+
+                            IconLeftWidget:
+                                icon: "images/icons/numeric-1.png"
 
 
