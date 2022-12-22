@@ -2,7 +2,7 @@ import sqlite3
 
 
 def main():
-    pass
+    get_children()
 
 
 def create_calendar_sheets_table():
@@ -40,6 +40,26 @@ def crate_children_table():
                 days_age integer)"""
 
     execute_statement(statement)
+
+
+"""
+Children table methods
+"""
+
+
+def get_children():
+    statement = "select * from children"
+
+    with sqlite3.connect("vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement)
+        children_list = [{"id": child[0], "name": child[1], "birth_date": child[2], "days_age": child[3]}
+                         for child in cursor.fetchall()]
+        conn.commit()
+
+    return children_list
+
+
 
 
 def execute_statement(statement, **kwargs):
