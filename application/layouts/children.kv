@@ -28,15 +28,21 @@
 
             BoxLayout:
                 orientation: "vertical"
-                size_hint: .6, .7
+                size_hint: .95, .7
                 pos_hint: {"center_x": .5}
 
                 canvas:
                     Color:
-                        rgba: (207/255, 138/255, 176/255, .4)
+                        rgba: (0, 0, 0, 1)
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
+                        radius: [15]
+                    Color:
+                        rgba: (255/255, 255/255, 255/255, 1)
+                    RoundedRectangle:
+                        pos: self.x + 1.5, self.y + 1.5
+                        size: self.width - 3, self.height - 3
                         radius: [15]
 
                 MDScrollView:
@@ -51,7 +57,7 @@
                                 icon: "plus"
 
                         OneLineAvatarIconListItem:
-                            text: "Karol, 30-04-2000"
+                            text: "Karol"
 
                             IconLeftWidget:
                                 icon: "images/icons/numeric-1.png"
