@@ -2,7 +2,7 @@ import sqlite3
 
 
 def main():
-    get_children()
+    pass
 
 
 def create_calendar_sheets_table():
