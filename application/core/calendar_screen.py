@@ -16,6 +16,8 @@ Builder.load_file("layouts/calendar.kv")
 class Calendar(Screen):
     calendar_date = date.today()
 
+
+
     def on_enter(self, *args):
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.ids.month_label.text = f"{month_name[self.calendar_date.month - 1].upper()}"
