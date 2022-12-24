@@ -1,8 +1,6 @@
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.list import OneLineAvatarIconListItem, IconLeftWidget
-from application.database.vaccination_calendar import get_children
-
 
 
 Builder.load_file("layouts/children.kv")
