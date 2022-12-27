@@ -1,7 +1,6 @@
 import sys
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
-from kivymd.uix.list import OneLineAvatarIconListItem, IconLeftWidget
 
 sys.path.append('database')
 
@@ -22,6 +21,7 @@ class Children(Screen):
     text: "{child['name']}"
     on_release:
         app.root.current = "child"
+        app.root.transition.direction = "left"
         
     IconLeftWidget:
         icon: "images/icons/numeric-{child['id']}.png"''')

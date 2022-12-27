@@ -1,0 +1,17 @@
+<Child>:
+    name: "child"
+
+    MDBottomNavigation:
+        panel_color: "#2e8b2e"
+
+        MDBottomNavigationItem:
+            name: "back"
+            text: "Pwrót"
+            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+            icon: "arrow-u-left-top-bold"
+            on_tab_release:
+                app.root.current = "children"
+                root.manager.transition.direction = "right"
+
+            FitImage:
+                source: "images/bg.png"
