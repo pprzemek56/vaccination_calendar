@@ -12,18 +12,23 @@ Builder.load_file("layouts/children.kv")
 
 class Children(Screen):
     first_enter = True
+    children_list = vaccination_calendar.get_children()
+    list_elements = []
 
     def on_enter(self, *args):
         if self.first_enter:
-            children_list = vaccination_calendar.get_children()
-            list_elements = []
+            for child in self.children_list:
+                item = Builder.load_string(f'''OneLineAvatarIconListItem:
+    text: "{child['name']}"
+    on_release:
+        app.root.current = "child"
+        
+    IconLeftWidget:
+        icon: "images/icons/numeric-{child['id']}.png"''')
+                self.list_elements.append(item)
 
-            for child in children_list:
-                item = OneLineAvatarIconListItem(text=f"{child['name']}")
-                item.add_widget(IconLeftWidget(icon=f"images/icons/numeric-{child['id']}.png"))
-                list_elements.append(item)
-
-            for element in list_elements:
+            for element in self.list_elements:
                 self.ids.children_list.add_widget(element)
 
             self.first_enter = False
+
