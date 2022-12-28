@@ -1,3 +1,34 @@
+<ClickableTextFieldRoundChild@MDRelativeLayout>:
+    size_hint_y: None
+    height: text_field.height
+
+    MDTextField:
+        id: text_field
+        mode: "round"
+        normal_color: .8, .8, .8, 1
+        color_active: .9, .9, .9, 1
+        -height: "42dp"
+        disabled: True
+
+    MDIconButton:
+        id: edit_btn
+        icon: "pencil-lock"
+        pos_hint: {"center_y": .5}
+        pos: text_field.width - self.width + dp(8), 0
+        on_release:
+            root.ids.save_btn.disabled = False
+            root.ids.text_field.disabled = False
+            root.ids.text_field.focus = True
+
+    MDIconButton:
+        id: save_btn
+        icon: "content-save-edit"
+        pos_hint: {"center_y": .5}
+        pos: text_field.width - self.width - dp(32), 0
+        disabled: True
+        on_release:
+
+
 <Child>:
     name: "child"
 
@@ -15,3 +46,16 @@
 
             FitImage:
                 source: "images/bg.png"
+
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: "12dp"
+                size_hint_x: .6
+                pos_hint: {"center_x": .5, "center_y": .3}
+                adaptive_height: True
+
+                ClickableTextFieldRoundChild:
+                    id: edit_name
+
+                ClickableTextFieldRoundChild:
+                    id: edit_date
