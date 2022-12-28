@@ -53,7 +53,7 @@ def get_children():
     with sqlite3.connect("database/vaccination_calendar.db") as conn:
         cursor = conn.cursor()
         cursor.execute(statement)
-        children_list = [{"id": child[0], "name": child[1], "birth_date": child[2], "days_age": child[3]}
+        children_list = [{"id": child[0], "name": child[1], "birth_date": child[2]}
                          for child in cursor.fetchall()]
         conn.commit()
 
@@ -68,11 +68,11 @@ def add_child(name, birth_date):
 
 def execute_statement(statement, *args):
     if len(args) == 0:
-        with sqlite3.connect("vaccination_calendar.db") as conn:
+        with sqlite3.connect("database/vaccination_calendar.db") as conn:
             cursor = conn.cursor()
             cursor.execute(statement)
     else:
-        with sqlite3.connect("vaccination_calendar.db") as conn:
+        with sqlite3.connect("database/vaccination_calendar.db") as conn:
             cursor = conn.cursor()
             cursor.execute(statement, args)
             conn.commit()

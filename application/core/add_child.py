@@ -27,7 +27,7 @@ class AddChild(Screen):
         date = str(self.ids.date_field.text).strip()
 
         if re.match(r"^[A-Z]?[a-z]+$", name) is not None or re.match(r"^\d{4}-\d{2}-\d{2}$", date) is not None:
-            # TODO: dodanie dziecka do bazy danych
+            vaccination_calendar.add_child(name, date)
             return True
 
         # TODO: Wyświetlenie kompunikatu o błędzie
