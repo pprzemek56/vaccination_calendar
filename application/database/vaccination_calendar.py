@@ -1,8 +1,9 @@
 import sqlite3
+import datetime
 
 
 def main():
-    print(get_children())
+    add_child("Kamil", "1999-08-07")
 
 
 def create_calendar_sheets_table():
@@ -36,8 +37,7 @@ def crate_children_table():
     statement = """create table if not exists children (
                 id integer primary key,
                 name text,
-                birth_date text,
-                days_age integer)"""
+                birth_date text)"""
 
     execute_statement(statement)
 
@@ -60,13 +60,22 @@ def get_children():
     return children_list
 
 
+def add_child(name, birth_date):
+    statement = "insert into children(name, birth_date) values (?, ?)"
+
+    execute_statement(statement, name, datetime.date.fromisoformat(birth_date))
 
 
-def execute_statement(statement, **kwargs):
-    with sqlite3.connect("vaccination_calendar.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute(statement)
-        conn.commit()
+def execute_statement(statement, *args):
+    if len(args) == 0:
+        with sqlite3.connect("vaccination_calendar.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute(statement)
+    else:
+        with sqlite3.connect("vaccination_calendar.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute(statement, args)
+            conn.commit()
 
 
 if __name__ == "__main__":
