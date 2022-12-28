@@ -1,3 +1,24 @@
+<ClickableTextFieldRound@MDRelativeLayout>:
+    size_hint_y: None
+    height: date_field.height
+
+    MDTextField:
+        id: date_field
+        icon_left: "calendar"
+        mode: "round"
+        hint_text: "Data Urodzenia"
+        normal_color: .8, .8, .8, 1
+        color_active: .9, .9, .9, 1
+        -height: "42dp"
+
+    MDIconButton:
+        icon: "calendar"
+        pos_hint: {"center_y": .5}
+        pos: date_field.width - self.width + dp(8), 0
+        theme_text_color: "Hint"
+        on_release: app.root.ids.add_child_id.show_date_picker()
+
+
 <AddChild>:
     name: "add_child"
 
@@ -56,15 +77,7 @@
                     color_active: .9, .9, .9, 1
                     -height: "42dp"
 
-                MDTextField:
-                    id: date_field
-                    icon_left: "calendar"
-                    mode: "round"
-                    hint_text: "Data Urodzenia"
-                    normal_color: .8, .8, .8, 1
-                    color_active: .9, .9, .9, 1
-                    -height: "42dp"
-                    on_focus: root.show_date_picker()
+                ClickableTextFieldRound:
 
                 MDFillRoundFlatButton:
                     text: "Dodaj"
