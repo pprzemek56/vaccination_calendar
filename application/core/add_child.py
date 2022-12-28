@@ -2,6 +2,8 @@ import sys
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
 import re
 
@@ -13,6 +15,10 @@ Builder.load_file("layouts/add_child.kv")
 
 
 class AddChild(Screen):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.dialog = None
 
     def show_date_picker(self):
         date_dialog = MDDatePicker(title="Wybierz datę", title_input="Wpisz datę")
@@ -26,9 +32,22 @@ class AddChild(Screen):
         name = str(self.ids.name_field.text).strip()
         date = str(self.ids.date_field.text).strip()
 
-        if re.match(r"^[A-Z]?[a-z]+$", name) is not None or re.match(r"^\d{4}-\d{2}-\d{2}$", date) is not None:
+        if re.match(r"^[A-Z]?[a-z]+$", name) is not None:
             vaccination_calendar.add_child(name, date)
+            self.ids.name_field.text = ""
+            self.ids.date_field.text = ""
             return True
 
-        # TODO: Wyświetlenie kompunikatu o błędzie
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title="Błędne imię!",
+                text="Imię musi składać się tylko i wyłącznie z liter oraz tylko pierwsza litera może być wielka",
+                buttons=[
+                    MDFlatButton(
+                        text="POWRÓT",
+                        on_release=self.close_dialog)])
+        self.dialog.open()
         return False
+
+    def close_dialog(self, obj):
+        self.dialog.dismiss()
