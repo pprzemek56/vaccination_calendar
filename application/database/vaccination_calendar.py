@@ -1,5 +1,5 @@
 import sqlite3
-import datetime
+from datetime import date
 
 
 def main():
@@ -63,7 +63,7 @@ def get_children():
 def add_child(name, birth_date):
     statement = "insert into children(name, birth_date) values (?, ?)"
 
-    execute_statement(statement, name, datetime.date.fromisoformat(birth_date))
+    execute_statement(statement, name, date.fromisoformat(birth_date))
 
 
 def execute_statement(statement, *args):
