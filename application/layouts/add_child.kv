@@ -15,3 +15,64 @@
 
             FitImage:
                 source: "images/bg.png"
+
+            MDLabel:
+                text: "Szczepienia +"
+                font_size: 32
+                halign: 'center'
+                valign: 'middle'
+                theme_text_color: 'Custom'
+                text_color: (1, 1, 1, 1)
+                font_name: "fonts/static/OpenSans/OpenSans-ExtraBoldItalic.ttf"
+                pos_hint: {"center_y": .825}
+
+            MDBoxLayout:
+                md_bg_color: app.theme_cls.primary_color
+                size_hint: None, .2
+                width: self.height
+                radius: self.height / 2
+                pos: -self.height / 3, root.height - self.height + dp(42)
+
+            MDBoxLayout:
+                md_bg_color: app.theme_cls.primary_color
+                size_hint: None, .15
+                width: self.height
+                radius: self.height / 2
+                pos: root.width - self.width / 2.2, root.height - dp(240)
+
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: "12dp"
+                size_hint_x: .6
+                pos_hint: {"center_x": .5, "center_y": .3}
+                adaptive_height: True
+
+                MDTextField:
+                    id: name_field
+                    icon_left: "account"
+                    mode: "round"
+                    hint_text: "Imię"
+                    normal_color: .8, .8, .8, 1
+                    color_active: .9, .9, .9, 1
+                    -height: "42dp"
+
+                MDTextField:
+                    id: date_field
+                    icon_left: "calendar"
+                    mode: "round"
+                    hint_text: "Data Urodzenia"
+                    normal_color: .8, .8, .8, 1
+                    color_active: .9, .9, .9, 1
+                    -height: "42dp"
+                    on_focus: root.show_date_picker()
+
+                MDFillRoundFlatButton:
+                    text: "Dodaj"
+                    text_color: "white"
+                    size_hint: None, None
+                    size: name_field.size[0], name_field.size[1]
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        if root.validate_inputs():\
+                        app.root.current = "children"
+                        root.manager.transition.direction = "right"

@@ -25,7 +25,7 @@ class Calendar(Screen):
         self.generate_calendar()
 
     def set_date(self):
-        date_dialog = MDDatePicker(title="Wybierz datę")
+        date_dialog = MDDatePicker(title="Wybierz datę", title_input="Wpisz datę")
         date_dialog.bind(on_save=self.save_date)
         date_dialog.open()
 
