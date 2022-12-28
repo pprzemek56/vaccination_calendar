@@ -26,16 +26,16 @@ class AddChild(Screen):
         date_dialog.open()
 
     def save_date(self, instance, value, date_range):
-        self.ids.date_field.text = f"{value}"
+        self.ids.date_field.ids.text_field.text = f"{value}"
 
     def validate_inputs(self):
         name = str(self.ids.name_field.text).strip()
-        date = str(self.ids.date_field.text).strip()
+        date = str(self.ids.date_field.ids.text_field.text).strip()
 
         if re.match(r"^[A-Z]?[a-z]+$", name) is not None:
             vaccination_calendar.add_child(name, date)
             self.ids.name_field.text = ""
-            self.ids.date_field.text = ""
+            self.ids.date_field.ids.text_field.text = ""
             return True
 
         if not self.dialog:

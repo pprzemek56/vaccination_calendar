@@ -1,9 +1,9 @@
 <ClickableTextFieldRound@MDRelativeLayout>:
     size_hint_y: None
-    height: date_field.height
+    height: text_field.height
 
     MDTextField:
-        id: date_field
+        id: text_field
         icon_left: "calendar"
         mode: "round"
         hint_text: "Data Urodzenia"
@@ -14,7 +14,7 @@
     MDIconButton:
         icon: "calendar"
         pos_hint: {"center_y": .5}
-        pos: date_field.width - self.width + dp(8), 0
+        pos: text_field.width - self.width + dp(8), 0
         theme_text_color: "Hint"
         on_release: app.root.ids.add_child_id.show_date_picker()
 
@@ -78,6 +78,7 @@
                     -height: "42dp"
 
                 ClickableTextFieldRound:
+                    id: date_field
 
                 MDFillRoundFlatButton:
                     text: "Dodaj"
