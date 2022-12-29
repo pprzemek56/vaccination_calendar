@@ -9,8 +9,16 @@ class Child(Screen):
         super().__init__(**kwargs)
         self.current_id = None
 
+    @property
+    def current_id(self):
+        return self._current_id
+
+    @current_id.setter
+    def current_id(self, current_id):
+        self._current_id = current_id
+
     def on_enter(self, *args):
-        print(self.ids)
+        pass
 
     def show_date_picker(self):
         pass
