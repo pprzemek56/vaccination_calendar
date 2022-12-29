@@ -85,6 +85,12 @@ def update_name(child_id, name):
     execute_statement(statement, name, child_id)
 
 
+def update_date(child_id, birth_date):
+    statement = "update children set birth_date = ? where id = ?"
+
+    execute_statement(statement, birth_date, child_id)
+
+
 def execute_statement(statement, *args):
     if len(args) == 0:
         with sqlite3.connect("database/vaccination_calendar.db") as conn:
