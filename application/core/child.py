@@ -2,6 +2,7 @@ import sys
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
+from kivymd.uix.pickers import MDDatePicker
 
 sys.path.append('database')
 import vaccination_calendar
@@ -14,6 +15,7 @@ class Child(Screen):
         super().__init__(**kwargs)
         self.current_id = None
         self.child = None
+        self.dialog = None
 
     @property
     def current_id(self):
@@ -48,13 +50,34 @@ class Child(Screen):
             self.ids.edit_name.ids.edit_btn.icon = "pencil"
             self.ids.edit_name.ids.text_field.disabled = False
             self.ids.edit_name.ids.text_field.focus = True
+            self.ids.edit_name.ids.save_btn.disabled = False
         else:
             self.ids.edit_name.ids.edit_btn.icon = "pencil-lock"
             self.ids.edit_name.ids.text_field.disabled = True
             self.ids.edit_name.ids.text_field.text = self.child["name"]
+            self.ids.edit_name.ids.save_btn.disabled = True
 
     def edit_date_btn(self):
         if self.ids.edit_date.ids.edit_btn.icon == "pencil-lock":
+            self.show_date_picker()
             self.ids.edit_date.ids.edit_btn.icon = "pencil"
+            self.ids.edit_date.ids.save_btn.disabled = False
         else:
             self.ids.edit_date.ids.edit_btn.icon = "pencil-lock"
+            self.ids.edit_date.ids.text_field.text = self.child["birth_date"]
+            self.ids.edit_date.ids.save_btn.disabled = True
+
+    def show_date_picker(self):
+        date_dialog = MDDatePicker(title="Wybierz datę", title_input="Wpisz datę")
+        date_dialog.bind(on_save=self.save_date, on_cancel=self.cancel_date)
+        date_dialog.open()
+
+    def save_date(self, instance, value, date_range):
+        self.ids.edit_date.ids.text_field.text = f"{value}"
+        self.ids.edit_date.ids.edit_btn.icon = "pencil-lock"
+
+    def cancel_date(self, instance, time):
+        self.ids.edit_date.ids.edit_btn.icon = "pencil-lock"
+        self.ids.edit_date.ids.save_btn.disabled = True
+        self.ids.edit_date.ids.text_field.text = self.child["birth_date"]
+        self.ids.edit_date.ids.text_field.focus = False
