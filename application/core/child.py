@@ -1,5 +1,10 @@
+import sys
+
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
+
+sys.path.append('database')
+import vaccination_calendar
 
 Builder.load_file("layouts/child.kv")
 
@@ -19,6 +24,7 @@ class Child(Screen):
 
     def on_enter(self, *args):
         pass
+        # self.ids.edit_name.ids.text_field.text =
 
     def show_date_picker(self):
         pass

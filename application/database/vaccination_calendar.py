@@ -3,7 +3,7 @@ from datetime import date
 
 
 def main():
-    add_child("Kamil", "1999-08-07")
+    pass
 
 
 def create_calendar_sheets_table():
@@ -43,7 +43,7 @@ def crate_children_table():
 
 
 """
-Children table methods
+    Children table methods
 """
 
 
@@ -64,6 +64,19 @@ def add_child(name, birth_date):
     statement = "insert into children(name, birth_date) values (?, ?)"
 
     execute_statement(statement, name, date.fromisoformat(birth_date))
+
+
+def get_child(child_id):
+    statement = "select * from children where id = ?"
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement, child_id)
+        fetched = cursor.fetchone()
+        child = {"id": fetched[0], "name": fetched[1], "birth_date": fetched[2]}
+        conn.commit()
+
+    return child
 
 
 def execute_statement(statement, *args):
