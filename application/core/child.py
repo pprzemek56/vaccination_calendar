@@ -1,7 +1,10 @@
+import re
 import sys
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
 
 sys.path.append('database')
@@ -38,6 +41,7 @@ class Child(Screen):
         self.ids.edit_name.ids.text_field.text = self.child["name"]
         self.ids.edit_name.ids.text_field.icon_left = "account"
         self.ids.edit_name.ids.edit_btn.on_release = self.edit_name_btn
+        self.ids.edit_name.ids.save_btn.on_release = self.save_name_btn
         self.ids.edit_date.ids.text_field.text = self.child["birth_date"]
         self.ids.edit_date.ids.text_field.icon_left = "calendar"
         self.ids.edit_date.ids.edit_btn.on_release = self.edit_date_btn
@@ -83,7 +87,26 @@ class Child(Screen):
         self.ids.edit_date.ids.text_field.focus = False
 
     def save_name_btn(self):
-        pass
+        name = str(self.ids.edit_name.ids.text_field.text).strip()
+        # Walidacja imienia
+        if re.match(r"^[A-Z]?[a-z]+$", name) is None:
+            self.dialog = MDDialog(
+                title="Błędne dane",
+                text=f"Imię musi składać się tylko i wyłącznie z liter oraz tylko pierwsza litera może być wielka",
+                buttons=[
+                    MDFlatButton(
+                        text="POWRÓT",
+                        on_release=self.close_dialog)])
+            self.dialog.open()
+            return
+
+        vaccination_calendar.update_name(self.child["id"], name)
+        self.ids.edit_name.ids.save_btn.disabled = False
+        self.ids.edit_name.ids.edit_btn.icon = "pencil-lock"
+
 
     def save_date_btn(self):
         pass
+
+    def close_dialog(self, obj):
+        self.dialog.dismiss()

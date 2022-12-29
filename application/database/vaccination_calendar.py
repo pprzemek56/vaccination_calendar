@@ -3,7 +3,7 @@ from datetime import date
 
 
 def main():
-    update_name(1, "Andy")
+    pass
 
 
 def create_calendar_sheets_table():
