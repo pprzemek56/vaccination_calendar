@@ -45,6 +45,12 @@ class Child(Screen):
         self.ids.edit_date.ids.text_field.text = self.child["birth_date"]
         self.ids.edit_date.ids.text_field.icon_left = "calendar"
         self.ids.edit_date.ids.edit_btn.on_release = self.edit_date_btn
+        self.ids.edit_date.ids.save_btn.on_release = self.save_date_btn
+        self.ids.edit_name.ids.save_btn.disabled = True
+        self.ids.edit_date.ids.save_btn.disabled = True
+        self.ids.edit_name.ids.edit_btn.icon = "pencil-lock"
+        self.ids.edit_name.ids.text_field.disabled = True
+        self.ids.edit_date.ids.text_field.disabled = True
 
     def show_date_picker(self):
         pass
@@ -101,12 +107,16 @@ class Child(Screen):
             return
 
         vaccination_calendar.update_name(self.child["id"], name)
-        self.ids.edit_name.ids.save_btn.disabled = False
+        self.ids.edit_name.ids.save_btn.disabled = True
         self.ids.edit_name.ids.edit_btn.icon = "pencil-lock"
 
 
     def save_date_btn(self):
-        pass
+        date = str(self.ids.edit_date.ids.text_field.text).strip()
+
+        vaccination_calendar.update_date(self.child["id"], date)
+        self.ids.edit_date.ids.save_btn.disabled = True
+        self.ids.edit_date.ids.edit_btn.icon = "pencil-lock"
 
     def close_dialog(self, obj):
         self.dialog.dismiss()
