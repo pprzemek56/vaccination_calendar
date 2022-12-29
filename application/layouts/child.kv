@@ -15,10 +15,10 @@
         icon: "pencil-lock"
         pos_hint: {"center_y": .5}
         pos: text_field.width - self.width + dp(8), 0
-        on_release:
-            root.ids.save_btn.disabled = False
-            root.ids.text_field.disabled = False
-            root.ids.text_field.focus = True
+        # on_release:
+            # root.ids.save_btn.disabled = False
+            # root.ids.text_field.disabled = False
+            # root.ids.text_field.focus = True
 
     MDIconButton:
         id: save_btn
