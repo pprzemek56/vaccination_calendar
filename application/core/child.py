@@ -81,3 +81,9 @@ class Child(Screen):
         self.ids.edit_date.ids.save_btn.disabled = True
         self.ids.edit_date.ids.text_field.text = self.child["birth_date"]
         self.ids.edit_date.ids.text_field.focus = False
+
+    def save_name_btn(self):
+        pass
+
+    def save_date_btn(self):
+        pass

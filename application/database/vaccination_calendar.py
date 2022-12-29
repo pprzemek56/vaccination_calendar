@@ -3,7 +3,7 @@ from datetime import date
 
 
 def main():
-    pass
+    update_name(1, "Andy")
 
 
 def create_calendar_sheets_table():
@@ -77,6 +77,12 @@ def get_child(child_id):
         conn.commit()
 
     return child
+
+
+def update_name(child_id, name):
+    statement = "update children set name = ? where id = ?"
+
+    execute_statement(statement, name, child_id)
 
 
 def execute_statement(statement, *args):
