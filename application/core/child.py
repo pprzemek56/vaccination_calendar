@@ -4,8 +4,10 @@ import sys
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.button import MDFlatButton
+from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
+from kivy.metrics import dp
 
 sys.path.append('database')
 import vaccination_calendar
@@ -37,6 +39,10 @@ class Child(Screen):
         self._child = child
 
     def on_enter(self, *args):
+        self.init_text_fileds()
+        self.init_vaccination_table()
+
+    def init_text_fileds(self):
         self.child = vaccination_calendar.get_child(self.current_id)
         self.ids.edit_name.ids.text_field.text = self.child["name"]
         self.ids.edit_name.ids.text_field.icon_left = "account"
@@ -51,6 +57,18 @@ class Child(Screen):
         self.ids.edit_name.ids.edit_btn.icon = "pencil-lock"
         self.ids.edit_name.ids.text_field.disabled = True
         self.ids.edit_date.ids.text_field.disabled = True
+
+    def init_vaccination_table(self):
+        table = MDDataTable(
+            column_data=[
+                ("Szczepionka", dp(30)),
+                ("Zalecany czas szczepienia", dp(30)),
+                ("Dawka", dp(30)),
+                ("Odbyte", dp(30))],
+            row_data=[]
+        )
+
+        self.ids.child_layout.add_widget(table)
 
     def show_date_picker(self):
         pass

@@ -94,7 +94,7 @@ def get_child_id(name):
 
     with sqlite3.connect("database/vaccination_calendar.db") as conn:
         cursor = conn.cursor()
-        cursor.execute(statement, (name, ))
+        cursor.execute(statement, (name,))
         fetched = cursor.fetchone()
         child_id = int(fetched[0])
 
@@ -190,6 +190,22 @@ def insert_into_vaccination_children(child_id):
 
     execute_statement(statement, child_id)
 
+
+def get_child_vaccination(child_id):
+    statement = "select vaccinations.name, vaccinations.days_from, vaccinations.days_to, vaccinations.dose, done" \
+                " from vaccination_children" \
+                " inner join vaccinations" \
+                " on vaccination_children.vaccination_id = vaccinations.id" \
+                " where child_id = ?"
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement, child_id)
+        fetched = cursor.fetchall()
+        vaccination_list = [{"name": v[0], "from": v[1], "to": v[2], "dose": v[3], "done": True if v[4] else False}
+                            for v in fetched]
+
+    return vaccination_list
 
 def execute_statement(statement, *args):
     if len(args) == 0:
