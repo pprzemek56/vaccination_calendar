@@ -15,3 +15,37 @@
 
             FitImage:
                 source: "images/bg.png"
+
+            MDLabel:
+                text: "Szczepienia +"
+                font_size: 32
+                halign: 'center'
+                valign: 'bottom'
+                theme_text_color: 'Custom'
+                text_color: (1, 1, 1, 1)
+                font_name: "fonts/static/OpenSans/OpenSans-ExtraBoldItalic.ttf"
+                pos_hint: {"center_y": .825}
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint: .95, .7
+                pos_hint: {"center_x": .5}
+
+                canvas:
+                    Color:
+                        rgba: (0, 0, 0, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                    Color:
+                        rgba: (255/255, 255/255, 255/255, 1)
+                    RoundedRectangle:
+                        pos: self.x + 1.5, self.y + 1.5
+                        size: self.width - 3, self.height - 3
+                        radius: [15]
+
+                MDScrollView:
+
+                    MDList:
+                        id: children_list

@@ -3,7 +3,7 @@ from datetime import date
 
 
 def main():
-    insert_into_vaccination()
+    pass
 
 
 def create_calendar_sheets_table():
@@ -102,6 +102,11 @@ def update_date(child_id, birth_date):
     execute_statement(statement, birth_date, child_id)
 
 
+"""
+    Vaccination table methods
+"""
+
+
 def insert_into_vaccination():
     statement = "insert into vaccinations(name, information, days_from, days_to, dose, mandatory)" \
                 "values ('Gruźlicy', 'Gruźlica jest chorobą zakaźną, zwykle rozprzetrzenia się drogą oddechową.', 0, 1, '1/1', 1);" \
@@ -138,6 +143,17 @@ def insert_into_vaccination():
 
     execute_statement(statement)
 
+
+def get_vaccination():
+    statement = "select distinct name from vaccinations"
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement)
+        fetched = cursor.fetchall()
+        vaccination = [v[0] for v in fetched]
+
+    return vaccination
 
 
 def execute_statement(statement, *args):
