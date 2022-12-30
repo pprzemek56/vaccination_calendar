@@ -15,12 +15,13 @@ import vaccination_calendar
 Builder.load_file("layouts/add_child.kv")
 
 
+
+
 class AddChild(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.dialog = None
-
     def show_date_picker(self):
         date_dialog = MDDatePicker(title="Wybierz datę", title_input="Wpisz datę")
         date_dialog.bind(on_save=self.save_date)
@@ -71,9 +72,13 @@ class AddChild(Screen):
             return False
 
         vaccination_calendar.add_child(name, date)
+        self.init_vaccination_children(vaccination_calendar.get_child_id(name))
         self.ids.name_field.text = ""
         self.ids.date_field.ids.text_field.text = ""
         return True
 
     def close_dialog(self, obj):
         self.dialog.dismiss()
+
+    def init_vaccination_children(self, child_id):
+        pass

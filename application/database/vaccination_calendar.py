@@ -85,9 +85,20 @@ def get_child(child_id):
         cursor.execute(statement, child_id)
         fetched = cursor.fetchone()
         child = {"id": fetched[0], "name": fetched[1], "birth_date": fetched[2]}
-        conn.commit()
 
     return child
+
+
+def get_child_id(name):
+    statement = "select id from children where name = ?"
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement, (name, ))
+        fetched = cursor.fetchone()
+        child_id = int(fetched[0])
+
+    return child_id
 
 
 def update_name(child_id, name):
@@ -161,11 +172,17 @@ def get_vaccination_by_name(name):
 
     with sqlite3.connect("database/vaccination_calendar.db") as conn:
         cursor = conn.cursor()
-        cursor.execute(statement, (name, ))
+        cursor.execute(statement, (name,))
         fetched = cursor.fetchone()
-        vaccination = {"name": fetched[1], "information": fetched[2], "days_from": fetched[3], "days_to": fetched[4], "dose": fetched[5].split("/")[1], "mandatory": True if fetched[6] == 1 else False}
+        vaccination = {"name": fetched[1], "information": fetched[2], "days_from": fetched[3], "days_to": fetched[4],
+                       "dose": fetched[5].split("/")[1], "mandatory": True if fetched[6] == 1 else False}
 
     return vaccination
+
+
+"""
+    Vaccination_Children table methods
+"""
 
 
 def execute_statement(statement, *args):
