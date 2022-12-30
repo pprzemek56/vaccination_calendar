@@ -101,6 +101,7 @@ def update_date(child_id, birth_date):
 
     execute_statement(statement, birth_date, child_id)
 
+
 def insert_into_vaccination():
     statement = "insert into vaccinations(name, information, days_from, days_to, dose, mandatory)" \
                 "values ('Gruźlicy', '', 0, 1, '1/1', 1);" \
@@ -134,6 +135,7 @@ def insert_into_vaccination():
                 "values ('Ospie wietrznej', '', 2190, 7300, '1/1', 0);" \
                 "values ('Wirusowemu zapaleniu wątroby typu B', '', 2190, 7300, '1/1', 0);" \
                 "values ('kleszczowemu zapaleniu mózgu', '', 2190, 7300, '1/1', 0);"
+
 
 def execute_statement(statement, *args):
     if len(args) == 0:
