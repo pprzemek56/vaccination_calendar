@@ -3,7 +3,7 @@ from datetime import date
 
 
 def main():
-    pass
+    create_vaccination_children_table()
 
 
 def create_calendar_sheets_table():
@@ -22,13 +22,11 @@ def create_calendar_sheets_table():
 def create_vaccinations_table():
     statement = """create table if not exists vaccinations(
                     id integer primary key,
-                    child_id integer,
                     name text,
                     information text,
                     days_from integer,
                     days_to integer,
-                    is_done boolean default 0,
-                    FOREIGN KEY (child_id) REFERENCES children(id))"""
+                    does text)"""
 
     execute_statement(statement)
 
@@ -38,6 +36,18 @@ def crate_children_table():
                 id integer primary key,
                 name text,
                 birth_date text)"""
+
+    execute_statement(statement)
+
+
+def create_vaccination_children_table():
+    statement = """create table if not exists vaccination_children (
+                id integer primary key,
+                child_id integer,
+                vaccination_id integer,
+                done boolean,
+                foreign key (child_id) references children(id),
+                foreign key (vaccination_id) references vaccinations(id))"""
 
     execute_statement(statement)
 
