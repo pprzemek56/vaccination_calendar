@@ -185,6 +185,12 @@ def get_vaccination_by_name(name):
 """
 
 
+def insert_into_vaccination_children(child_id):
+    statement = "insert into vaccination_children(child_id, vaccination_id) select ?, id from vaccinations"
+
+    execute_statement(statement, child_id)
+
+
 def execute_statement(statement, *args):
     if len(args) == 0:
         with sqlite3.connect("database/vaccination_calendar.db") as conn:
