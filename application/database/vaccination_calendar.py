@@ -156,6 +156,18 @@ def get_vaccination():
     return vaccination
 
 
+def get_vaccination_by_name(name):
+    statement = "select * from vaccinations where name = ?"
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement, (name, ))
+        fetched = cursor.fetchone()
+        vaccination = {"name": fetched[1], "information": fetched[2], "days_from": fetched[3], "days_to": fetched[4], "dose": fetched[5].split("/")[1], "mandatory": True if fetched[6] == 1 else False}
+
+    return vaccination
+
+
 def execute_statement(statement, *args):
     if len(args) == 0:
         with sqlite3.connect("database/vaccination_calendar.db") as conn:
