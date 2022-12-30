@@ -3,7 +3,7 @@ from datetime import date
 
 
 def main():
-    create_vaccination_children_table()
+    pass
 
 
 def create_calendar_sheets_table():
@@ -26,7 +26,8 @@ def create_vaccinations_table():
                     information text,
                     days_from integer,
                     days_to integer,
-                    does text)"""
+                    does text,
+                    mandatory boolean)"""
 
     execute_statement(statement)
 
@@ -100,6 +101,39 @@ def update_date(child_id, birth_date):
 
     execute_statement(statement, birth_date, child_id)
 
+def insert_into_vaccination():
+    statement = "insert into vaccinations(name, information, days_from, days_to, dose, mandatory)" \
+                "values ('Gruźlicy', '', 0, 1, '1/1', 1);" \
+                "values ('Wirusowemu zapaleniu wątroby typu B', '', 0, 1, '1/3', 1);" \
+                "values ('Wirusowemu zapaleniu wątroby typu B', '', 30, 60, '2/3', 1);" \
+                "values ('Wirusowemu zapaleniu wątroby typu B', '', 180, 210, '3/3', 1);" \
+                "values ('Rotawirusom', '', 30, 180, '1/1', 1);" \
+                "values ('Błonicy, tężcowi, krztuścowi', '', 30, 60, '1/7', 1);" \
+                "values ('Błonicy, tężcowi, krztuścowi', '', 60, 120, '2/7', 1);" \
+                "values ('Błonicy, tężcowi, krztuścowi', '', 120, 180, '3/7', 1);" \
+                "values ('Błonicy, tężcowi, krztuścowi', '', 450, 540, '4/7', 1);" \
+                "values ('Błonicy, tężcowi, krztuścowi', '', 2190, 2555, '5/7', 1);" \
+                "values ('Błonicy, tężcowi, krztuścowi', '', 5110, 5475, '6/7', 0);" \
+                "values ('Błonicy, tężcowi, krztuścowi', '', 6935, 7300, '7/7', 1);" \
+                "values ('Poliomyelitis', '', 60, 120, '1/4', 1);" \
+                "values ('Poliomyelitis', '', 120, 180, '2/4', 1);" \
+                "values ('Poliomyelitis', '', 450, 540, '3/4', 1);" \
+                "values ('Poliomyelitis', '', 2190, 2555, '4/4', 1);" \
+                "values ('Hib', '', 30, 60, '1/4', 1);" \
+                "values ('Hib', '', 60, 120, '2/4', 1);" \
+                "values ('Hib', '', 120, 180, '3/4', 1);" \
+                "values ('Hib', '', 450, 540, '4/4', 1);" \
+                "values ('Pneumokokom', '', 30, 60, '1/3', 1);" \
+                "values ('Pneumokokom', '', 90, 120, '2/3', 1);" \
+                "values ('Pneumokokom', '', 360, 450, '3/3', 1);" \
+                "values ('Odrze, śwince, różyczce', '', 360, 450, '1/2', 1);" \
+                "values ('Odrze, śwince, różyczce', '', 2190, 2555, '2/2', 1);" \
+                "values ('Grypie', '', 150, 6935, '1/1', 0);" \
+                "values ('Meningokokom', '', 30, 7300, '1/1', 0);" \
+                "values ('Ludzkiemu wirusowi brodawczaka', '', 4380, 7300, '1/1', 0);" \
+                "values ('Ospie wietrznej', '', 2190, 7300, '1/1', 0);" \
+                "values ('Wirusowemu zapaleniu wątroby typu B', '', 2190, 7300, '1/1', 0);" \
+                "values ('kleszczowemu zapaleniu mózgu', '', 2190, 7300, '1/1', 0);"
 
 def execute_statement(statement, *args):
     if len(args) == 0:
