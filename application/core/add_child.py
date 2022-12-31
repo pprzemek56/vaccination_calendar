@@ -71,6 +71,7 @@ class AddChild(Screen):
             return False
 
         vaccination_calendar.add_child(name, date)
+        vaccination_calendar.insert_into_vaccination_children(vaccination_calendar.get_child_id(name))
         self.ids.name_field.text = ""
         self.ids.date_field.ids.text_field.text = ""
         return True

@@ -85,9 +85,20 @@ def get_child(child_id):
         cursor.execute(statement, child_id)
         fetched = cursor.fetchone()
         child = {"id": fetched[0], "name": fetched[1], "birth_date": fetched[2]}
-        conn.commit()
 
     return child
+
+
+def get_child_id(name):
+    statement = "select id from children where name = ?"
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement, (name,))
+        fetched = cursor.fetchone()
+        child_id = int(fetched[0])
+
+    return child_id
 
 
 def update_name(child_id, name):
@@ -161,12 +172,40 @@ def get_vaccination_by_name(name):
 
     with sqlite3.connect("database/vaccination_calendar.db") as conn:
         cursor = conn.cursor()
-        cursor.execute(statement, (name, ))
+        cursor.execute(statement, (name,))
         fetched = cursor.fetchone()
-        vaccination = {"name": fetched[1], "information": fetched[2], "days_from": fetched[3], "days_to": fetched[4], "dose": fetched[5].split("/")[1], "mandatory": True if fetched[6] == 1 else False}
+        vaccination = {"name": fetched[1], "information": fetched[2], "days_from": fetched[3], "days_to": fetched[4],
+                       "dose": fetched[5].split("/")[1], "mandatory": True if fetched[6] == 1 else False}
 
     return vaccination
 
+
+"""
+    Vaccination_Children table methods
+"""
+
+
+def insert_into_vaccination_children(child_id):
+    statement = "insert into vaccination_children(child_id, vaccination_id) select ?, id from vaccinations"
+
+    execute_statement(statement, child_id)
+
+
+def get_child_vaccination(child_id):
+    statement = "select vaccinations.name, vaccinations.days_from, vaccinations.days_to, vaccinations.dose, done" \
+                " from vaccination_children" \
+                " inner join vaccinations" \
+                " on vaccination_children.vaccination_id = vaccinations.id" \
+                " where child_id = ?"
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement, child_id)
+        fetched = cursor.fetchall()
+        vaccination_list = [{"name": v[0], "from": v[1], "to": v[2], "dose": v[3], "done": True if v[4] else False}
+                            for v in fetched]
+
+    return vaccination_list
 
 def execute_statement(statement, *args):
     if len(args) == 0:

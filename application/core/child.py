@@ -4,8 +4,10 @@ import sys
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.button import MDFlatButton
+from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
+from kivy.metrics import dp
 
 sys.path.append('database')
 import vaccination_calendar
@@ -37,6 +39,10 @@ class Child(Screen):
         self._child = child
 
     def on_enter(self, *args):
+        self.init_text_fileds()
+        self.init_vaccination_table()
+
+    def init_text_fileds(self):
         self.child = vaccination_calendar.get_child(self.current_id)
         self.ids.edit_name.ids.text_field.text = self.child["name"]
         self.ids.edit_name.ids.text_field.icon_left = "account"
@@ -52,8 +58,53 @@ class Child(Screen):
         self.ids.edit_name.ids.text_field.disabled = True
         self.ids.edit_date.ids.text_field.disabled = True
 
-    def show_date_picker(self):
+    def init_vaccination_table(self):
+        vaccination_list = vaccination_calendar.get_child_vaccination(self.current_id)
+
+        table = MDDataTable(
+            size_hint=(1, .7),
+            pos_hint={"center_x": .5, "center_y": .35},
+            use_pagination=True,
+            rows_num=3,
+            column_data=[
+                ("Szczepionka", dp(60)),
+                ("Zalecany czas szczepienia", dp(30)),
+                ("Dawka", dp(30)),
+                ("Odbyte", dp(30))],
+            row_data=[
+                (f"Szczepionka przeciw {vaccination['name']}",
+                 self.convert_time(vaccination["from"], vaccination["to"]),
+                 self.convert_dose(vaccination["dose"]),
+                 ("check-bold", [0, 1, 0, 1], "") if vaccination["done"] else ("close-thick", [1, 0, 0, 1], "")) for vaccination in vaccination_list]
+        )
+        table.bind(on_row_press=self.press_row)
+        self.ids.child_layout.add_widget(table)
+
+    def press_row(self, instance_table, instance_row):
         pass
+
+    def convert_time(self, start, end):
+        if end <= 1:
+            return f"Do 24h po narodzinach"
+
+        if start <= 450:
+            start_f = f"{int(start / 30) + 1} miesiąca"
+        else:
+            start_f = f"{int(start / 365)} roku"
+
+        if end <= 540:
+            end_f = f"{int(end / 30) + 1} miesiąca"
+        else:
+            end_f = f"{int(end / 365)} roku"
+
+        return f"Od {start_f}, do {end_f} życia"
+
+
+    def convert_dose(self, dose):
+        x, y = str(dose).split("/")
+
+        return f"{x} z {y}"
+
 
     def edit_name_btn(self):
         if self.ids.edit_name.ids.edit_btn.icon == "pencil-lock":
