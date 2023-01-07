@@ -9,12 +9,9 @@ def main():
 def create_calendar_sheets_table():
     statement = """create table if not exists calendar_sheets(
                     id integer primary key,
-                    child_id integer,
                     title text,
                     note text,
-                    created_at text,
-                    end_at text,
-                    foreign key (child_id) references children(id))"""
+                    created_at text)"""
 
     execute_statement(statement)
 
