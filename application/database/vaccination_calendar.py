@@ -204,6 +204,24 @@ def get_child_vaccination(child_id):
 
     return vaccination_list
 
+
+"""
+    Calendar_Sheets table methods
+"""
+
+
+def get_sheets():
+    statement = """select * from calendar_sheets"""
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement)
+        fetched = cursor.fetchall()
+        calendar_sheets = [{"title": v[1], "note": v[2], "created_at": date.fromisoformat("2023-01-07")} for v in fetched]
+
+    return calendar_sheets
+
+
 def execute_statement(statement, *args):
     if len(args) == 0:
         with sqlite3.connect("database/vaccination_calendar.db") as conn:
