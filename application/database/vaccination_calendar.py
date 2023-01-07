@@ -1,3 +1,4 @@
+import calendar
 import sqlite3
 from datetime import date
 
@@ -210,14 +211,17 @@ def get_child_vaccination(child_id):
 """
 
 
-def get_sheets():
-    statement = """select * from calendar_sheets"""
+def get_sheets_from_year_and_month(today_date):
+    first_day = date(today_date.year, today_date.month, 1)
+    last_day = date(today_date.year, today_date.month, calendar.monthrange(today_date.year, today_date.month)[1])
+
+    statement = """select * from calendar_sheets where created_at >= ? and created_at <= ?"""
 
     with sqlite3.connect("database/vaccination_calendar.db") as conn:
         cursor = conn.cursor()
-        cursor.execute(statement)
+        cursor.execute(statement, (first_day, last_day))
         fetched = cursor.fetchall()
-        calendar_sheets = [{"title": v[1], "note": v[2], "created_at": date.fromisoformat("2023-01-07")} for v in fetched]
+        calendar_sheets = [{"title": v[1], "note": v[2], "created_at": v[3]} for v in fetched]
 
     return calendar_sheets
 
