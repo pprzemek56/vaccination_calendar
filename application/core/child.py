@@ -21,6 +21,7 @@ class Child(Screen):
         self.current_id = None
         self.child = None
         self.dialog = None
+        self.table = None
 
     @property
     def current_id(self):
@@ -42,6 +43,9 @@ class Child(Screen):
         self.init_text_fileds()
         self.init_vaccination_table()
 
+    def on_leave(self, *args):
+        self.ids.child_layout.remove_widget(self.table)
+
     def init_text_fileds(self):
         self.child = vaccination_calendar.get_child(self.current_id)
         self.ids.edit_name.ids.text_field.text = self.child["name"]
@@ -61,7 +65,7 @@ class Child(Screen):
     def init_vaccination_table(self):
         vaccination_list = vaccination_calendar.get_child_vaccination(self.current_id)
 
-        table = MDDataTable(
+        self.table = MDDataTable(
             size_hint=(1, .7),
             pos_hint={"center_x": .5, "center_y": .35},
             use_pagination=True,
@@ -77,8 +81,8 @@ class Child(Screen):
                  self.convert_dose(vaccination["dose"]),
                  ("check-bold", [0, 1, 0, 1], "") if vaccination["done"] else ("close-thick", [1, 0, 0, 1], "")) for vaccination in vaccination_list]
         )
-        table.bind(on_row_press=self.press_row)
-        self.ids.child_layout.add_widget(table)
+        self.table.bind(on_row_press=self.press_row)
+        self.ids.child_layout.add_widget(self.table)
 
     def press_row(self, instance_table, instance_row):
         pass
