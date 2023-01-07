@@ -43,15 +43,14 @@ class Calendar(Screen):
 
     def generate_calendar(self):
         self.ids.calendar_layout.clear_widgets()
-        self.calendar_sheets = vaccination_calendar.get_sheets_from_year_and_month()
-
+        self.calendar_sheets = vaccination_calendar.get_sheets_from_year_and_month(self.calendar_date)
+        calendar = self.get_calendar(self.calendar_date.year, self.calendar_date.month)
 
         for weekday in weekheader(3).split(" "):
             label = MDIconButton(icon=f"images/icons/{weekday}.png", size_hint=(1, 1), disabled=True)
             self.ids.calendar_layout.add_widget(label)
         for i in range(5):
             for j in range(7):
-                calendar = self.get_calendar(self.calendar_date.year, self.calendar_date.month)
                 btn = MDIconButton(icon=f"images/icons/numeric-{calendar[i + 1][j]}.png", size_hint=(1, 1))
                 self.ids.calendar_layout.add_widget(btn)
 
