@@ -211,7 +211,7 @@ def get_child_vaccination(child_id):
 """
 
 
-def get_sheets_from_year_and_month(today_date):
+def get_sheets_between_dates(today_date):
     first_day = date(today_date.year, today_date.month, 1)
     last_day = date(today_date.year, today_date.month, calendar.monthrange(today_date.year, today_date.month)[1])
 

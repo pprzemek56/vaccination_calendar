@@ -43,15 +43,21 @@ class Calendar(Screen):
 
     def generate_calendar(self):
         self.ids.calendar_layout.clear_widgets()
-        self.calendar_sheets = vaccination_calendar.get_sheets_from_year_and_month(self.calendar_date)
         calendar = self.get_calendar(self.calendar_date.year, self.calendar_date.month)
+
+        self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(self.calendar_date)
 
         for weekday in weekheader(3).split(" "):
             label = MDIconButton(icon=f"images/icons/{weekday}.png", size_hint=(1, 1), disabled=True)
             self.ids.calendar_layout.add_widget(label)
-        for i in range(5):
+        for i in range(6):
             for j in range(7):
-                btn = MDIconButton(icon=f"images/icons/numeric-{calendar[i + 1][j]}.png", size_hint=(1, 1))
+                btn = None
+                try:
+                    btn = MDIconButton(icon=f"images/icons/numeric-{calendar[i][j]}.png", size_hint=(1, 1))
+                except IndexError:
+                    break
+
                 self.ids.calendar_layout.add_widget(btn)
 
     def change_month(self, side):
@@ -86,19 +92,23 @@ class Calendar(Screen):
             len(monthcalendar(year - 1 if month == 1 else year,
                               12 if month == 1 else month - 1)) - 1]
         next_month = monthcalendar(year + 1 if month == 12 else year, 1 if month == 12 else month + 1)[0]
-        calendar = [["pon", "wto", "śrd", "czw", "pią", "sob", "nie"]]
 
-        for i in range(5):
-            calendar.append(monthcalendar(year, month)[i])
+        calendar = []
+        for i in range(6):
+            try:
+                calendar.append(monthcalendar(year, month)[i])
+            except IndexError:
+                break
+
             if i == 0:
                 for j in range(7):
-                    if calendar[i + 1][j] == 0:
-                        calendar[i + 1][j] = f"{previous_month[j]}w"
+                    if calendar[i][j] == 0:
+                        calendar[i][j] = f"{previous_month[j]}w"
                     else:
                         break
-            elif i == 4:
+            elif i == 5 or i == 4:
                 for j in range(7):
-                    if calendar[i + 1][j] == 0:
-                        calendar[i + 1][j] = f"{next_month[-(7 - j)]}w"
+                    if calendar[i][j] == 0:
+                        calendar[i][j] = f"{next_month[-(7 - j)]}w"
 
         return calendar
