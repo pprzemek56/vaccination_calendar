@@ -43,9 +43,12 @@ class Calendar(Screen):
 
     def generate_calendar(self):
         self.ids.calendar_layout.clear_widgets()
-        calendar = self.get_calendar(self.calendar_date.year, self.calendar_date.month)
+        calendar = get_calendar(self.calendar_date.year, self.calendar_date.month)
 
-        self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(self.calendar_date)
+        try:
+            self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(calendar[0][0]["id"], calendar[5][6]["id"])
+        except TypeError:
+            self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(calendar[0][0]["id"], calendar[4][6]["id"])
 
         for weekday in weekheader(3).split(" "):
             label = MDIconButton(icon=f"images/icons/{weekday}.png", size_hint=(1, 1), disabled=True)
@@ -54,8 +57,9 @@ class Calendar(Screen):
             for j in range(7):
                 btn = None
                 try:
-                    btn = MDIconButton(icon=f"images/icons/numeric-{calendar[i][j]}.png", size_hint=(1, 1))
-                except IndexError:
+                    btn = MDIconButton(id=calendar[i][j]["id"],
+                                       icon=f"images/icons/numeric-{calendar[i][j]['icon']}.png", size_hint=(1, 1))
+                except TypeError:
                     break
 
                 self.ids.calendar_layout.add_widget(btn)
@@ -86,29 +90,47 @@ class Calendar(Screen):
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.generate_calendar()
 
-    def get_calendar(self, year, month):
-        previous_month = monthcalendar(year - 1 if month == 1 else year,
-                                       12 if month == 1 else month - 1)[
-            len(monthcalendar(year - 1 if month == 1 else year,
-                              12 if month == 1 else month - 1)) - 1]
-        next_month = monthcalendar(year + 1 if month == 12 else year, 1 if month == 12 else month + 1)[0]
 
-        calendar = []
-        for i in range(6):
+def get_calendar(year, month):
+    previous_month = monthcalendar(year - 1 if month == 1 else year,
+                                   12 if month == 1 else month - 1)[
+        len(monthcalendar(year - 1 if month == 1 else year, 12 if month == 1 else month - 1)) - 1]
+    next_month = monthcalendar(year + 1 if month == 12 else year, 1 if month == 12 else month + 1)[0]
+    current_month = monthcalendar(year, month)
+
+    calendar = [[_ for _ in range(7)] for _ in range(6)]
+
+    for i in range(6):
+        for j in range(7):
             try:
-                calendar.append(monthcalendar(year, month)[i])
+                calendar[i][j] = {"id": str(date(year, month, current_month[i][j])), "icon": current_month[i][j]}
             except IndexError:
                 break
+            except ValueError:
+                calendar[i][j] = {"id": 0, "icon": 0}
 
             if i == 0:
-                for j in range(7):
-                    if calendar[i][j] == 0:
-                        calendar[i][j] = f"{previous_month[j]}w"
-                    else:
-                        break
+                if calendar[i][j]["id"] == 0:
+                    calendar[i][j] = {"id": str(date(
+                        year if month != 1 else year - 1, month - 1 if month != 1 else 12, previous_month[j])),
+                                      "icon": f"{previous_month[j]}w"}
             elif i == 5 or i == 4:
-                for j in range(7):
-                    if calendar[i][j] == 0:
-                        calendar[i][j] = f"{next_month[-(7 - j)]}w"
+                if calendar[i][j]["id"] == 0:
+                    calendar[i][j] = {"id": str(date(
+                        year if month != 12 else year + 1, month + 1 if month != 12 else 1, next_month[j])),
+                                      "icon": f"{next_month[j]}w"}
+    return calendar
 
-        return calendar
+
+def minus_month(current_date):
+    if current_date.month == 1:
+        return current_date.replace(month=12, year=current_date.year - 1)
+
+    return current_date.replace(month=current_date.month - 1)
+
+
+def plus_month(current_date):
+    if current_date.month == 12:
+        return current_date.replace(month=1, year=current_date.year + 1)
+
+    return current_date.replace(month=current_date.month + 1)

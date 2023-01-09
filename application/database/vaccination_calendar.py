@@ -211,16 +211,14 @@ def get_child_vaccination(child_id):
 """
 
 
-def get_sheets_between_dates(today_date):
-    first_day = date(today_date.year, today_date.month, 1)
-    last_day = date(today_date.year, today_date.month, calendar.monthrange(today_date.year, today_date.month)[1])
+def get_sheets_between_dates(first_date, last_date):
 
     statement = """select * from calendar_sheets where created_at >= ? and created_at <= ?
                     order by created_at asc"""
 
     with sqlite3.connect("database/vaccination_calendar.db") as conn:
         cursor = conn.cursor()
-        cursor.execute(statement, (first_day, last_day))
+        cursor.execute(statement, (first_date, last_date))
         fetched = cursor.fetchall()
         calendar_sheets = [{"title": v[1], "note": v[2], "created_at": v[3]} for v in fetched]
 
