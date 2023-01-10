@@ -28,6 +28,11 @@ class Calendar(Screen):
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.ids.month_label.text = f"{month_name[self.calendar_date.month - 1].upper()}"
 
+        self.ids.weekdays_layout.clear_widgets()
+        for weekday in weekheader(3).split(" "):
+            label = MDIconButton(icon=f"images/icons/{weekday}.png", size_hint=(1, 1), disabled=True)
+            self.ids.weekdays_layout.add_widget(label)
+
         self.generate_calendar()
 
     def set_date(self):
@@ -51,10 +56,6 @@ class Calendar(Screen):
         except TypeError:
             self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(calendar[0][0]["id"],
                                                                                  calendar[4][6]["id"])
-
-        for weekday in weekheader(3).split(" "):
-            label = MDIconButton(icon=f"images/icons/{weekday}.png", size_hint=(1, 1), disabled=True)
-            self.ids.calendar_layout.add_widget(label)
         for i in range(6):
             for j in range(7):
                 btn = None
