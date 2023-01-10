@@ -23,17 +23,20 @@ class Calendar(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.calendar_sheets = None
+        self.first_enter = True
 
     def on_enter(self, *args):
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.ids.month_label.text = f"{month_name[self.calendar_date.month - 1].upper()}"
 
-        self.ids.weekdays_layout.clear_widgets()
-        for weekday in weekheader(3).split(" "):
-            label = MDIconButton(icon=f"images/icons/{weekday}.png", size_hint=(1, 1), disabled=True)
-            self.ids.weekdays_layout.add_widget(label)
+        if self.first_enter:
+            for weekday in weekheader(3).split(" "):
+                label = MDIconButton(icon=f"images/icons/{weekday}.png", size_hint=(1, 1), disabled=True)
+                self.ids.weekdays_layout.add_widget(label)
 
-        self.generate_calendar()
+            self.generate_calendar()
+
+            self.first_enter = False
 
     def set_date(self):
         date_dialog = MDDatePicker(title="Wybierz datę", title_input="Wpisz datę")
