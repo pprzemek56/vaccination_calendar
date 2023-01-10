@@ -5,7 +5,7 @@ from kivy.uix.screenmanager import Screen
 from datetime import date
 from calendar import monthcalendar, weekheader
 
-from kivymd.uix.button import MDIconButton
+from kivymd.uix.button import MDIconButton, MDFloatingActionButton, MDRectangleFlatIconButton
 from kivymd.uix.pickers import MDDatePicker
 
 sys.path.append('database')
@@ -46,9 +46,11 @@ class Calendar(Screen):
         calendar = get_calendar(self.calendar_date.year, self.calendar_date.month)
 
         try:
-            self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(calendar[0][0]["id"], calendar[5][6]["id"])
+            self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(calendar[0][0]["id"],
+                                                                                 calendar[5][6]["id"])
         except TypeError:
-            self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(calendar[0][0]["id"], calendar[4][6]["id"])
+            self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(calendar[0][0]["id"],
+                                                                                 calendar[4][6]["id"])
 
         for weekday in weekheader(3).split(" "):
             label = MDIconButton(icon=f"images/icons/{weekday}.png", size_hint=(1, 1), disabled=True)
@@ -57,8 +59,7 @@ class Calendar(Screen):
             for j in range(7):
                 btn = None
                 try:
-                    btn = MDIconButton(id=calendar[i][j]["id"],
-                                       icon=f"images/icons/numeric-{calendar[i][j]['icon']}.png", size_hint=(1, 1))
+                    btn = MDIconButton(icon="images/icons/1c.png", size_hint=(1, 1))
                 except TypeError:
                     break
 
@@ -113,12 +114,12 @@ def get_calendar(year, month):
                 if calendar[i][j]["id"] == 0:
                     calendar[i][j] = {"id": str(date(
                         year if month != 1 else year - 1, month - 1 if month != 1 else 12, previous_month[j])),
-                                      "icon": f"{previous_month[j]}w"}
+                        "icon": f"{previous_month[j]}w"}
             elif i == 5 or i == 4:
                 if calendar[i][j]["id"] == 0:
                     calendar[i][j] = {"id": str(date(
                         year if month != 12 else year + 1, month + 1 if month != 12 else 1, next_month[j])),
-                                      "icon": f"{next_month[j]}w"}
+                        "icon": f"{next_month[j]}w"}
     return calendar
 
 

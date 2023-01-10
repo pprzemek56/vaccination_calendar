@@ -24,7 +24,7 @@
                     rows: 2
                     halign: "center"
                     valign: "middle"
-                    size_hint: 1, .05
+                    size_hint: 1, .15
 
                     MDIconButton:
                         icon: "chevron-left"
@@ -34,6 +34,8 @@
                     MDFlatButton:
                         id: year_label
                         size_hint: .333, .333
+                        font_size: 32
+                        font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
                         on_press: root.set_date()
 
 
@@ -50,6 +52,8 @@
                     MDFlatButton:
                         id: month_label
                         size_hint: .333, .333
+                        font_size: 32
+                        font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
                         on_press: root.set_date()
 
                     MDIconButton:
@@ -62,6 +66,7 @@
                     cols: 7
                     size_hint: .9, .5
                     pos_hint: {"center_x": .5, "center_y": .5}
+                    spacing: 10
 
                     # canvas:
                         # Color:
