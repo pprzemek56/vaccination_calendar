@@ -51,23 +51,41 @@ class Calendar(Screen):
 
     def generate_calendar(self):
         self.ids.calendar_layout.clear_widgets()
-        calendar = get_calendar(self.calendar_date.year, self.calendar_date.month)
+        year = self.calendar_date.year
+        month = self.calendar_date.month
 
-        try:
-            self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(calendar[0][0]["id"],
-                                                                                 calendar[5][6]["id"])
-        except TypeError:
-            self.calendar_sheets = vaccination_calendar.get_sheets_between_dates(calendar[0][0]["id"],
-                                                                                 calendar[4][6]["id"])
+        previous_month = monthcalendar(year - 1 if month == 1 else year, 12 if month == 1 else month - 1)[
+            len(monthcalendar(year - 1 if month == 1 else year, 12 if month == 1 else month - 1)) - 1]
+        next_month = monthcalendar(year + 1 if month == 12 else year, 1 if month == 12 else month + 1)[0]
+        current_month = monthcalendar(year, month)
+
         for i in range(6):
             for j in range(7):
-                btn = None
                 try:
-                    btn = MDIconButton(icon="images/icons/1c.png", size_hint=(1, 1))
-                except TypeError:
-                    break
+                    self.ids.calendar_layout.add_widget(
+                        MDIconButton(id=str(date(year, month, current_month[i][j])),
+                                     icon=f"images/icons/{current_month[i][j]}.png",
+                                     size_hint=(1, 1)))
+                except ValueError:
+                    if i == 0:
+                        self.ids.calendar_layout.add_widget(
+                            MDIconButton(id=str(date(
+                                year if month != 1 else year - 1,
+                                month - 1 if month != 1 else 12,
+                                previous_month[j])),
+                                icon=f"images/icons/{previous_month[j]}s.png",
+                                size_hint=(1, 1)))
 
-                self.ids.calendar_layout.add_widget(btn)
+                    elif i == 4 or i == 5:
+                        self.ids.calendar_layout.add_widget(
+                            MDIconButton(id=str(date(
+                                year if month != 12 else year + 1,
+                                month + 1 if month != 12 else 1,
+                                next_month[j])),
+                                icon=f"images/icons/{next_month[j]}s.png",
+                                size_hint=(1, 1)))
+                except IndexError:
+                    break
 
     def change_month(self, side):
         active_month = self.calendar_date.month
@@ -94,37 +112,6 @@ class Calendar(Screen):
 
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.generate_calendar()
-
-
-def get_calendar(year, month):
-    previous_month = monthcalendar(year - 1 if month == 1 else year,
-                                   12 if month == 1 else month - 1)[
-        len(monthcalendar(year - 1 if month == 1 else year, 12 if month == 1 else month - 1)) - 1]
-    next_month = monthcalendar(year + 1 if month == 12 else year, 1 if month == 12 else month + 1)[0]
-    current_month = monthcalendar(year, month)
-
-    calendar = [[_ for _ in range(7)] for _ in range(6)]
-
-    for i in range(6):
-        for j in range(7):
-            try:
-                calendar[i][j] = {"id": str(date(year, month, current_month[i][j])), "icon": current_month[i][j]}
-            except IndexError:
-                break
-            except ValueError:
-                calendar[i][j] = {"id": 0, "icon": 0}
-
-            if i == 0:
-                if calendar[i][j]["id"] == 0:
-                    calendar[i][j] = {"id": str(date(
-                        year if month != 1 else year - 1, month - 1 if month != 1 else 12, previous_month[j])),
-                        "icon": f"{previous_month[j]}w"}
-            elif i == 5 or i == 4:
-                if calendar[i][j]["id"] == 0:
-                    calendar[i][j] = {"id": str(date(
-                        year if month != 12 else year + 1, month + 1 if month != 12 else 1, next_month[j])),
-                        "icon": f"{next_month[j]}w"}
-    return calendar
 
 
 def minus_month(current_date):
