@@ -172,13 +172,6 @@ def get_vaccination_by_name(name):
     Vaccination_Children table methods
 """
 
-
-def insert_into_vaccination_children(child_id):
-    statement = "insert into vaccination_children(child_id, vaccination_id) select ?, id from vaccinations"
-
-    execute_statement(statement, child_id)
-
-
 def get_child_vaccination(child_id):
     statement = "select vaccinations.name, vaccinations.days_from, vaccinations.days_to, vaccinations.dose, done" \
                 " from vaccination_children" \
@@ -194,6 +187,16 @@ def get_child_vaccination(child_id):
                             for v in fetched]
 
     return vaccination_list
+
+
+def insert_into_vaccination_children(child_id):
+    statement = """insert into vaccination_children (child_id, vaccination_id, notification_date)
+                    select children.id, vaccinations.id, date(children.birth_date, '+' || vaccinations.days_from || ' days')
+                    from children
+                    cross join vaccinations
+                    where children.id = ?"""
+
+    execute_statement(statement, child_id)
 
 
 def execute_statement(statement, *args):
