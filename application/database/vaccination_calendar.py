@@ -7,16 +7,6 @@ def main():
     pass
 
 
-def create_calendar_sheets_table():
-    statement = """create table if not exists calendar_sheets(
-                    id integer primary key,
-                    title text,
-                    note text,
-                    created_at text)"""
-
-    execute_statement(statement)
-
-
 def create_vaccinations_table():
     statement = """create table if not exists vaccinations(
                     id integer primary key,
@@ -204,25 +194,6 @@ def get_child_vaccination(child_id):
                             for v in fetched]
 
     return vaccination_list
-
-
-"""
-    Calendar_Sheets table methods
-"""
-
-
-def get_sheets_between_dates(first_date, last_date):
-
-    statement = """select * from calendar_sheets where created_at >= ? and created_at <= ?
-                    order by created_at asc"""
-
-    with sqlite3.connect("database/vaccination_calendar.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute(statement, (first_date, last_date))
-        fetched = cursor.fetchall()
-        calendar_sheets = [{"title": v[1], "note": v[2], "created_at": v[3]} for v in fetched]
-
-    return calendar_sheets
 
 
 def execute_statement(statement, *args):
