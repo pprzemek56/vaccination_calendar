@@ -1,4 +1,3 @@
-import calendar
 import sqlite3
 from datetime import date
 
@@ -35,6 +34,7 @@ def create_vaccination_children_table():
                 child_id integer,
                 vaccination_id integer,
                 done boolean,
+                notification_date date,
                 foreign key (child_id) references children(id),
                 foreign key (vaccination_id) references vaccinations(id))"""
 
