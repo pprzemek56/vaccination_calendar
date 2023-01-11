@@ -1,15 +1,13 @@
 import sys
+from calendar import monthcalendar, weekheader
+from datetime import date
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
-from datetime import date
-from calendar import monthcalendar, weekheader
-
-from kivymd.uix.button import MDIconButton, MDFloatingActionButton, MDRectangleFlatIconButton
+from kivymd.uix.button import MDIconButton
 from kivymd.uix.pickers import MDDatePicker
 
 sys.path.append('database')
-import vaccination_calendar
 
 month_name = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
               "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"]
