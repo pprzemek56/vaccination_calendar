@@ -1,5 +1,6 @@
+import calendar
 import sqlite3
-from datetime import date
+from datetime import date, timedelta, datetime
 
 
 def main():
@@ -172,6 +173,7 @@ def get_vaccination_by_name(name):
     Vaccination_Children table methods
 """
 
+
 def get_child_vaccination(child_id):
     statement = "select vaccinations.name, vaccinations.days_from, vaccinations.days_to, vaccinations.dose, done" \
                 " from vaccination_children" \
@@ -199,6 +201,30 @@ def insert_into_vaccination_children(child_id):
     execute_statement(statement, child_id)
 
 
+def get_notification(today_date):
+    first_day = date(today_date.year, today_date.month, 1)
+    last_day = date(today_date.year, today_date.month, calendar.monthrange(today_date.year, today_date.month)[1])
+
+    statement = """select children.name, vaccinations.name, vaccinations.days_to, vaccinations.dose,
+                            vaccinations.mandatory, done, notification_date  
+                    from vaccination_children
+                    inner join children
+                    on vaccination_children.child_id = children.id
+                    inner join vaccinations
+                    on vaccination_children.vaccination_id = vaccinations.id 
+                    where notification_date >= ? and notification_date <= ?
+                    order by notification_date asc"""
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement, (first_day, last_day))
+        fetched = cursor.fetchall()
+        calendar_sheets = [{"name": v[0], "title": v[1], "finish_date": to_finish_date(v[2], v[6]),
+                            "dose": v[3], "mandatory": v[4], "done": v[5], "notification_date": v[6]} for v in fetched]
+
+    return calendar_sheets
+
+
 def execute_statement(statement, *args):
     if len(args) == 0:
         with sqlite3.connect("database/vaccination_calendar.db") as conn:
@@ -209,6 +235,11 @@ def execute_statement(statement, *args):
             cursor = conn.cursor()
             cursor.execute(statement, args)
             conn.commit()
+
+
+def to_finish_date(days, start_date):
+    finish_datetime = datetime.combine(date.fromisoformat(start_date), datetime.min.time()) + timedelta(days=days)
+    return finish_datetime.date()
 
 
 if __name__ == "__main__":
