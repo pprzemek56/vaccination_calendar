@@ -4,7 +4,8 @@ from datetime import date
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
-from kivymd.uix.button import MDIconButton
+from kivymd.uix.button import MDIconButton, MDFlatButton
+from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
 
 sys.path.append('database')
@@ -23,6 +24,8 @@ class Calendar(Screen):
         super().__init__(**kwargs)
         self.calendar_sheets = None
         self.first_enter = True
+        self.notification_dialogs = []
+        self.current_dialog_window = None
 
     def on_enter(self, *args):
         self.ids.year_label.text = f"{self.calendar_date.year}"
@@ -58,36 +61,112 @@ class Calendar(Screen):
         next_month = monthcalendar(year + 1 if month == 12 else year, 1 if month == 12 else month + 1)[0]
         current_month = monthcalendar(year, month)
 
+        notifications = vaccination_calendar.get_notification(date(
+            year if month != 1 else year - 1,
+            month - 1 if month != 1 else 12,
+            previous_month[0]), date(
+            year if month != 12 else year + 1,
+            month + 1 if month != 12 else 1,
+            next_month[len(next_month) - 1]))
+
+        self.create_notification_dialogs(notifications)
+
+        notification_dates = {notification["notification_date"] for notification in notifications}
+
         for i in range(6):
             for j in range(7):
                 try:
-                    self.ids.calendar_layout.add_widget(
-                        MDIconButton(id=str(date(year, month, current_month[i][j])),
-                                     icon=f"images/icons/{current_month[i][j]}.png",
-                                     size_hint=(1, 1)))
+                    btn_id = str(date(year, month, current_month[i][j]))
+                    if notification_dates.__contains__(btn_id):
+                        notification_dates.remove(btn_id)
+                        btn = MDIconButton(id=btn_id,
+                                           icon=f"images/icons/{current_month[i][j]}c.png",
+                                           size_hint=(1, 1),
+                                           on_release=lambda instance: self.open_dialog(instance))
+                    else:
+                        btn = MDIconButton(id=btn_id,
+                                           icon=f"images/icons/{current_month[i][j]}.png",
+                                           size_hint=(1, 1))
+                    self.ids.calendar_layout.add_widget(btn)
                 except ValueError:
                     if i == 0:
-                        self.ids.calendar_layout.add_widget(
-                            MDIconButton(id=str(date(
-                                year if month != 1 else year - 1,
-                                month - 1 if month != 1 else 12,
-                                previous_month[j])),
-                                icon=f"images/icons/{previous_month[j]}s.png",
-                                size_hint=(1, 1)))
-
+                        btn_id = str(date(
+                            year if month != 1 else year - 1,
+                            month - 1 if month != 1 else 12,
+                            previous_month[j]))
+                        if notification_dates.__contains__(btn_id):
+                            notification_dates.remove(btn_id)
+                            btn = MDIconButton(id=btn_id,
+                                               icon=f"images/icons/{previous_month[j]}sc.png",
+                                               size_hint=(1, 1),
+                                               on_release=lambda instance: self.open_dialog(instance))
+                        else:
+                            btn = MDIconButton(id=btn_id,
+                                               icon=f"images/icons/{previous_month[j]}s.png",
+                                               size_hint=(1, 1))
+                        self.ids.calendar_layout.add_widget(btn)
                     elif i == 4 or i == 5:
-                        self.ids.calendar_layout.add_widget(
-                            MDIconButton(id=str(date(
-                                year if month != 12 else year + 1,
-                                month + 1 if month != 12 else 1,
-                                next_month[j])),
-                                icon=f"images/icons/{next_month[j]}s.png",
-                                size_hint=(1, 1)))
+                        btn_id = str(date(
+                            year if month != 12 else year + 1,
+                            month + 1 if month != 12 else 1,
+                            next_month[j]))
+                        if notification_dates.__contains__(btn_id):
+                            notification_dates.remove(btn_id)
+                            btn = MDIconButton(id=btn_id,
+                                               icon=f"images/icons/{next_month[j]}sc.png",
+                                               size_hint=(1, 1),
+                                               on_release=lambda instance: self.open_dialog(instance))
+                        else:
+                            btn = MDIconButton(id=btn_id,
+                                               icon=f"images/icons/{next_month[j]}s.png",
+                                               size_hint=(1, 1))
+                        self.ids.calendar_layout.add_widget(btn)
                 except IndexError:
                     break
 
-        notifications = vaccination_calendar.get_notification(self.calendar_date)
-        
+    def open_dialog(self, instance):
+        for dialog in self.notification_dialogs:
+            if dialog["id"] == instance.id:
+                self.current_dialog_window = dialog["dialog_window"]
+                self.current_dialog_window.open()
+                return
+
+    def create_notification_dialogs(self, notifications):
+        for notification in notifications:
+            if len(self.notification_dialogs) == 0:
+                dialog_window = MDDialog(text=f"Dziecko: {notification['name']}," \
+                                              f"\nSzczepionka przeciw: {notification['title']}," \
+                                              f"\nData końcowa: {notification['finish_date']}," \
+                                              f"\nDawka: {notification['dose']}," \
+                                              f"Czy obowiązkowe: {notification['mandatory']}, Czy zrobione: {notification['done']},\n",
+                                         buttons=[
+                                             MDFlatButton(
+                                                 text="POWRÓT",
+                                                 on_release=self.close_dialog)])
+
+                self.notification_dialogs.append(
+                    {"id": f"{notification['notification_date']}", "dialog_window": dialog_window})
+
+            for dialog in self.notification_dialogs:
+                if dialog["id"] == f"{notification['notification_date']}":
+                    dialog_text = f"{dialog['dialog_window'].text}Dziecko: {notification['name']}," \
+                                  f"\nSzczepionka przeciw: {notification['title']}," \
+                                  f"\nData końcowa: {notification['finish_date']}," \
+                                  f"\nDawka: {notification['dose']}," \
+                                  f"Czy obowiązkowe: {notification['mandatory']}, Czy zrobione: {notification['done']},\n"
+                    dialog["dialog_window"].text = dialog_text
+                else:
+                    dialog_window = MDDialog(text=f"Dziecko: {notification['name']}," \
+                                                  f"\nSzczepionka przeciw: {notification['title']}," \
+                                                  f"\nData końcowa: {notification['finish_date']}," \
+                                                  f"\nDawka: {notification['dose']}," \
+                                                  f"Czy obowiązkowe: {notification['mandatory']}, Czy zrobione: {notification['done']},\n",
+                                             buttons=[
+                                                 MDFlatButton(
+                                                     text="POWRÓT",
+                                                     on_release=self.close_dialog)])
+                    self.notification_dialogs.append(
+                        {"id": f"{notification['notification_date']}", "dialog_window": dialog_window})
 
     def change_month(self, side):
         active_month = self.calendar_date.month
@@ -106,7 +185,6 @@ class Calendar(Screen):
         self.generate_calendar()
 
     def change_year(self, side):
-
         if side == "left":
             self.calendar_date = self.calendar_date.replace(year=self.calendar_date.year - 1)
         else:
@@ -114,6 +192,9 @@ class Calendar(Screen):
 
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.generate_calendar()
+
+    def close_dialog(self, obj):
+        self.current_dialog_window.dismiss()
 
 
 def minus_month(current_date):

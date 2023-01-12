@@ -201,10 +201,7 @@ def insert_into_vaccination_children(child_id):
     execute_statement(statement, child_id)
 
 
-def get_notification(today_date):
-    first_day = date(today_date.year, today_date.month, 1)
-    last_day = date(today_date.year, today_date.month, calendar.monthrange(today_date.year, today_date.month)[1])
-
+def get_notification(first_date, last_date):
     statement = """select children.name, vaccinations.name, vaccinations.days_to, vaccinations.dose,
                             vaccinations.mandatory, done, notification_date  
                     from vaccination_children
@@ -217,7 +214,7 @@ def get_notification(today_date):
 
     with sqlite3.connect("database/vaccination_calendar.db") as conn:
         cursor = conn.cursor()
-        cursor.execute(statement, (first_day, last_day))
+        cursor.execute(statement, (first_date, last_date))
         fetched = cursor.fetchall()
         calendar_sheets = [{"name": v[0], "title": v[1], "finish_date": to_finish_date(v[2], v[6]),
                             "dose": v[3], "mandatory": v[4], "done": v[5], "notification_date": v[6]} for v in fetched]
