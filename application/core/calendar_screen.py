@@ -8,6 +8,7 @@ from kivymd.uix.button import MDIconButton
 from kivymd.uix.pickers import MDDatePicker
 
 sys.path.append('database')
+import vaccination_calendar
 
 month_name = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
               "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"]
@@ -84,6 +85,9 @@ class Calendar(Screen):
                                 size_hint=(1, 1)))
                 except IndexError:
                     break
+
+        notifications = vaccination_calendar.get_notification(self.calendar_date)
+        
 
     def change_month(self, side):
         active_month = self.calendar_date.month
