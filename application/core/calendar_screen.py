@@ -7,6 +7,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.button import MDIconButton, MDFlatButton
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.label import MDLabel, MDIcon
 from kivymd.uix.pickers import MDDatePicker
 from kivymd.uix.scrollview import MDScrollView
 
@@ -30,7 +31,6 @@ class Calendar(Screen):
         super().__init__(**kwargs)
         self.calendar_sheets = None
         self.first_enter = True
-        self.dialog = None
 
     def on_enter(self, *args):
         self.ids.year_label.text = f"{self.calendar_date.year}"
@@ -66,14 +66,13 @@ class Calendar(Screen):
         next_month = monthcalendar(year + 1 if month == 12 else year, 1 if month == 12 else month + 1)[0]
         current_month = monthcalendar(year, month)
 
-        notifications = vaccination_calendar.get_notifications(date(
+        notifications = vaccination_calendar.get_notification(date(
             year if month != 1 else year - 1,
             month - 1 if month != 1 else 12,
             previous_month[0]), date(
             year if month != 12 else year + 1,
             month + 1 if month != 12 else 1,
             next_month[len(next_month) - 1]))
-
 
         notification_dates = {notification["notification_date"] for notification in notifications}
 
@@ -85,8 +84,7 @@ class Calendar(Screen):
                         notification_dates.remove(btn_id)
                         btn = MDIconButton(id=btn_id,
                                            icon=f"images/icons/{current_month[i][j]}c.png",
-                                           size_hint=(1, 1),
-                                           on_release=lambda instance: self.open_dialog(instance))
+                                           size_hint=(1, 1))
                     else:
                         btn = MDIconButton(id=btn_id,
                                            icon=f"images/icons/{current_month[i][j]}.png",
@@ -102,8 +100,7 @@ class Calendar(Screen):
                             notification_dates.remove(btn_id)
                             btn = MDIconButton(id=btn_id,
                                                icon=f"images/icons/{previous_month[j]}sc.png",
-                                               size_hint=(1, 1),
-                                               on_release=lambda instance: self.open_dialog(instance))
+                                               size_hint=(1, 1))
                         else:
                             btn = MDIconButton(id=btn_id,
                                                icon=f"images/icons/{previous_month[j]}s.png",
@@ -118,8 +115,7 @@ class Calendar(Screen):
                             notification_dates.remove(btn_id)
                             btn = MDIconButton(id=btn_id,
                                                icon=f"images/icons/{next_month[j]}sc.png",
-                                               size_hint=(1, 1),
-                                               on_release=lambda instance: self.open_dialog(instance))
+                                               size_hint=(1, 1))
                         else:
                             btn = MDIconButton(id=btn_id,
                                                icon=f"images/icons/{next_month[j]}s.png",
@@ -128,12 +124,6 @@ class Calendar(Screen):
                 except IndexError:
                     break
 
-    def open_dialog(self, instance):
-       vaccinations = vaccination_calendar.get_notifications()
-
-
-    def close_dialog(self, obj):
-        self.dialog.dismiss()
 
     def change_month(self, side):
         active_month = self.calendar_date.month
