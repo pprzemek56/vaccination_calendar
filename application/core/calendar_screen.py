@@ -3,13 +3,9 @@ from calendar import monthcalendar, weekheader
 from datetime import date
 
 from kivy.lang import Builder
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen
-from kivymd.uix.button import MDIconButton, MDFlatButton
-from kivymd.uix.dialog import MDDialog
-from kivymd.uix.label import MDLabel, MDIcon
+from kivymd.uix.button import MDIconButton
 from kivymd.uix.pickers import MDDatePicker
-from kivymd.uix.scrollview import MDScrollView
 
 sys.path.append('database')
 import vaccination_calendar
@@ -18,10 +14,6 @@ month_name = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
               "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"]
 
 Builder.load_file("layouts/calendar.kv")
-
-
-class NotificationWindow(BoxLayout):
-    pass
 
 
 class Calendar(Screen):
