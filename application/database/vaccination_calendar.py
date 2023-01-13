@@ -222,6 +222,26 @@ def get_notification(first_date, last_date):
     return calendar_sheets
 
 
+def get_notifications(current_date):
+    statement = """select children.name, vaccinations.name, vaccinations.days_to, vaccinations.dose,
+                            vaccinations.mandatory, done, notification_date  
+                    from vaccination_children
+                    inner join children
+                    on vaccination_children.child_id = children.id
+                    inner join vaccinations
+                    on vaccination_children.vaccination_id = vaccinations.id 
+                    where notification_date == ?"""
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement, (current_date, ))
+        fetched = cursor.fetchall()
+        calendar_sheets = [{"name": v[0], "title": v[1], "finish_date": to_finish_date(v[2], v[6]),
+                            "dose": v[3], "mandatory": v[4], "done": v[5], "notification_date": v[6]} for v in fetched]
+
+    return calendar_sheets
+
+
 def execute_statement(statement, *args):
     if len(args) == 0:
         with sqlite3.connect("database/vaccination_calendar.db") as conn:

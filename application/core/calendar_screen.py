@@ -3,10 +3,12 @@ from calendar import monthcalendar, weekheader
 from datetime import date
 
 from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.button import MDIconButton, MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
+from kivymd.uix.scrollview import MDScrollView
 
 sys.path.append('database')
 import vaccination_calendar
@@ -17,6 +19,10 @@ month_name = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
 Builder.load_file("layouts/calendar.kv")
 
 
+class NotificationWindow(BoxLayout):
+    pass
+
+
 class Calendar(Screen):
     calendar_date = date.today()
 
@@ -24,8 +30,7 @@ class Calendar(Screen):
         super().__init__(**kwargs)
         self.calendar_sheets = None
         self.first_enter = True
-        self.notification_dialogs = []
-        self.current_dialog_window = None
+        self.dialog = None
 
     def on_enter(self, *args):
         self.ids.year_label.text = f"{self.calendar_date.year}"
@@ -61,7 +66,7 @@ class Calendar(Screen):
         next_month = monthcalendar(year + 1 if month == 12 else year, 1 if month == 12 else month + 1)[0]
         current_month = monthcalendar(year, month)
 
-        notifications = vaccination_calendar.get_notification(date(
+        notifications = vaccination_calendar.get_notifications(date(
             year if month != 1 else year - 1,
             month - 1 if month != 1 else 12,
             previous_month[0]), date(
@@ -69,7 +74,6 @@ class Calendar(Screen):
             month + 1 if month != 12 else 1,
             next_month[len(next_month) - 1]))
 
-        self.create_notification_dialogs(notifications)
 
         notification_dates = {notification["notification_date"] for notification in notifications}
 
@@ -125,51 +129,11 @@ class Calendar(Screen):
                     break
 
     def open_dialog(self, instance):
-        for dialog in self.notification_dialogs:
-            if dialog["id"] == instance.id:
-                self.current_dialog_window = dialog["dialog_window"]
-                self.current_dialog_window.open()
-                return
+       vaccinations = vaccination_calendar.get_notifications()
 
-    def create_notification_dialogs(self, notifications):
-        for notification in notifications:
-            print(notification)
-            if len(self.notification_dialogs) == 0:
-                dialog_window = MDDialog(text=f"Dziecko: {notification['name']}," \
-                                              f"\nSzczepionka przeciw: {notification['title']}," \
-                                              f"\nData końcowa: {notification['finish_date']}," \
-                                              f"\nDawka: {notification['dose']}," \
-                                              f"Czy obowiązkowe: {notification['mandatory']}, Czy zrobione: {notification['done']},\n",
-                                         buttons=[
-                                             MDFlatButton(
-                                                 text="POWRÓT",
-                                                 on_release=self.close_dialog)])
 
-                self.notification_dialogs.append(
-                    {"id": f"{notification['notification_date']}", "dialog_window": dialog_window})
-                continue
-
-            for dialog in self.notification_dialogs:
-                if dialog["id"] == f"{notification['notification_date']}":
-                    dialog_text = f"{dialog['dialog_window'].text}Dziecko: {notification['name']}," \
-                                  f"\nSzczepionka przeciw: {notification['title']}," \
-                                  f"\nData końcowa: {notification['finish_date']}," \
-                                  f"\nDawka: {notification['dose']}," \
-                                  f"Czy obowiązkowe: {notification['mandatory']}, Czy zrobione: {notification['done']},\n"
-                    dialog["dialog_window"].text = dialog_text
-                    break
-
-            dialog_window = MDDialog(text=f"Dziecko: {notification['name']}," \
-                                          f"\nSzczepionka przeciw: {notification['title']}," \
-                                          f"\nData końcowa: {notification['finish_date']}," \
-                                          f"\nDawka: {notification['dose']}," \
-                                          f"Czy obowiązkowe: {notification['mandatory']}, Czy zrobione: {notification['done']},\n",
-                                     buttons=[
-                                         MDFlatButton(
-                                             text="POWRÓT",
-                                             on_release=self.close_dialog)])
-            self.notification_dialogs.append(
-                {"id": f"{notification['notification_date']}", "dialog_window": dialog_window})
+    def close_dialog(self, obj):
+        self.dialog.dismiss()
 
     def change_month(self, side):
         active_month = self.calendar_date.month
@@ -195,9 +159,6 @@ class Calendar(Screen):
 
         self.ids.year_label.text = f"{self.calendar_date.year}"
         self.generate_calendar()
-
-    def close_dialog(self, obj):
-        self.current_dialog_window.dismiss()
 
 
 def minus_month(current_date):
