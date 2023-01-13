@@ -3,7 +3,7 @@ from calendar import monthcalendar, weekheader
 from datetime import date
 
 from kivy.lang import Builder
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, ScreenManagerException
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.pickers import MDDatePicker
 
@@ -40,6 +40,16 @@ class Calendar(Screen):
             self.generate_calendar()
 
             self.first_enter = False
+
+    def open_day(self, instance):
+        self.day.current_id = instance.id
+        try:
+            self.manager.add_widget(self.day)
+        except ScreenManagerException:
+            pass
+        finally:
+            self.manager.current = "day"
+            self.manager.transition.direction = "left"
 
     def set_date(self):
         date_dialog = MDDatePicker(title="Wybierz datę", title_input="Wpisz datę")
@@ -80,7 +90,8 @@ class Calendar(Screen):
                         notification_dates.remove(btn_id)
                         btn = MDIconButton(id=btn_id,
                                            icon=f"images/icons/{current_month[i][j]}c.png",
-                                           size_hint=(1, 1))
+                                           size_hint=(1, 1),
+                                           on_release=self.open_day)
                     else:
                         btn = MDIconButton(id=btn_id,
                                            icon=f"images/icons/{current_month[i][j]}.png",
@@ -96,7 +107,8 @@ class Calendar(Screen):
                             notification_dates.remove(btn_id)
                             btn = MDIconButton(id=btn_id,
                                                icon=f"images/icons/{previous_month[j]}sc.png",
-                                               size_hint=(1, 1))
+                                               size_hint=(1, 1),
+                                               on_release=self.open_day)
                         else:
                             btn = MDIconButton(id=btn_id,
                                                icon=f"images/icons/{previous_month[j]}s.png",
@@ -111,7 +123,8 @@ class Calendar(Screen):
                             notification_dates.remove(btn_id)
                             btn = MDIconButton(id=btn_id,
                                                icon=f"images/icons/{next_month[j]}sc.png",
-                                               size_hint=(1, 1))
+                                               size_hint=(1, 1),
+                                               on_release=self.open_day)
                         else:
                             btn = MDIconButton(id=btn_id,
                                                icon=f"images/icons/{next_month[j]}s.png",
