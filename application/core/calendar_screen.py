@@ -8,7 +8,10 @@ from kivymd.uix.button import MDIconButton
 from kivymd.uix.pickers import MDDatePicker
 
 sys.path.append('database')
+sys.path.append('core')
+
 import vaccination_calendar
+from day import Day
 
 month_name = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec",
               "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"]
@@ -23,6 +26,7 @@ class Calendar(Screen):
         super().__init__(**kwargs)
         self.calendar_sheets = None
         self.first_enter = True
+        self.day = Day()
 
     def on_enter(self, *args):
         self.ids.year_label.text = f"{self.calendar_date.year}"
