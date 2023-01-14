@@ -79,7 +79,8 @@ class Child(Screen):
                 (f"Szczepionka przeciw {vaccination['name']}",
                  self.convert_time(vaccination["from"], vaccination["to"]),
                  self.convert_dose(vaccination["dose"]),
-                 ("check-bold", [0, 1, 0, 1], "") if vaccination["done"] else ("close-thick", [1, 0, 0, 1], "")) for vaccination in vaccination_list]
+                 ("check-bold", [0, 1, 0, 1], "")
+                 if vaccination["done"] else ("close-thick", [1, 0, 0, 1], "")) for vaccination in vaccination_list]
         )
         self.table.bind(on_row_press=self.press_row)
         self.ids.child_layout.add_widget(self.table)

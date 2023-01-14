@@ -31,7 +31,8 @@ class Vaccination(Screen):
 
         self.dialog = MDDialog(
                 title=f"Szczepionka przeciw {vaccination['name']}",
-                text=f"{vaccination['information']}\nIlość dawek: {vaccination['dose']}\nSzczepienie {'obowiązkowe' if vaccination['mandatory'] else 'nieobowiązkowe'}",
+                text=f"{vaccination['information']}\nIlość dawek: {vaccination['dose']}"
+                     f"\nSzczepienie {'obowiązkowe' if vaccination['mandatory'] else 'nieobowiązkowe'}",
                 buttons=[
                     MDFlatButton(
                         text="OKEY",

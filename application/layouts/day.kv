@@ -1,4 +1,23 @@
 <CarouselItem>:
+    cols: 2
+    rows: 6
+    pos_hint: {"center_x": .5, "center_y": .4}
+    size_hint: .9, .5
+    padding: 10
+
+    canvas:
+        Color:
+            rgba: (0, 0, 0, 1)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [15]
+        Color:
+            rgba: (255/255, 255/255, 255/255, 1)
+        RoundedRectangle:
+            pos: self.x + 1.5, self.y + 1.5
+            size: self.width - 3, self.height - 3
+            radius: [15]
 
 
 <Day>:
@@ -29,13 +48,17 @@
                 font_name: "fonts/static/OpenSans/OpenSans-ExtraBoldItalic.ttf"
                 pos_hint: {"center_y": .825}
 
-            Carousel:
+            MDLabel:
+                id: current_date
+                font_size: 32
+                halign: 'center'
+                valign: 'bottom'
+                theme_text_color: 'Custom'
+                text_color: (1, 1, 1, 1)
+                font_name: "fonts/static/OpenSans/OpenSans-ExtraBoldItalic.ttf"
+                pos_hint: {"center_y": .725}
+
+            MDCarousel:
                 id: carousel
 
-                # BoxLayout:
-                    # MDLabel:
-                        # text: "first layout"
 
-                # BoxLayout:
-                    # MDLabel:
-                        # text: "second layout"
