@@ -1,17 +1,29 @@
 import sys
 from datetime import date
 
+from kivy.app import App
+from kivy.core.window import Window, Animation
 from kivy.graphics import Color, Rectangle, Line
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import Screen
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.carousel import MDCarousel
 from kivymd.uix.label import MDLabel, MDIcon
 
 sys.path.append('database')
 import vaccination_calendar
 
 Builder.load_file("layouts/day.kv")
+
+
+class Dot(MDBoxLayout):
+    pass
+
+
+class Dots(MDBoxLayout):
+    pass
 
 
 class CarouselItem(GridLayout):
@@ -22,6 +34,7 @@ class Day(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.current_id = None
+        self.app = App.get_running_app()
 
     @property
     def current_id(self):
@@ -34,6 +47,14 @@ class Day(Screen):
     def on_enter(self, *args):
         vaccinations = vaccination_calendar.get_notifications(date.fromisoformat(self.current_id))
         self.ids.current_date.text = str(self.current_id)
+        dots_amount = len(vaccinations)
+
+        for i in range(dots_amount):
+            dot = Dot()
+            dot.index = i
+            if i == 0:
+                dot.md_bg_color = "#2e8b2e"
+            self.ids.dots.add_widget(dot)
 
         for vaccination in vaccinations:
             carousel_item = CarouselItem()
@@ -55,3 +76,15 @@ class Day(Screen):
                                      if vaccination['done'] else
                                      MDIcon(icon="close-thick", theme_text_color="Custom", text_color=(1, 0, 0, 1)))
             self.ids.carousel.add_widget(carousel_item)
+
+    def on_leave(self, *args):
+        self.ids.carousel._index = 0
+        self.ids.dots.clear_widgets()
+        self.ids.carousel.clear_widgets()
+
+    def on_index(self, index: int) -> None:
+        for instance_dot in self.ids.dots.children:
+            if instance_dot.index == index:
+                instance_dot.md_bg_color = "#2e8b2e"
+            else:
+                instance_dot.md_bg_color = "#90a390"

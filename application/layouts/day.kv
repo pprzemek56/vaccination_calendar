@@ -1,3 +1,15 @@
+<Dot>
+    index: 0
+    size_hint: None, None
+    size: "12dp", "12dp"
+    radius: self.size[0] / 2
+    md_bg_color: app.theme_cls.disabled_hint_text_color
+
+<Dots>
+    adaptive_size: True
+    pos_hint: {"center_x": .5}
+    spacing: "8dp"
+
 <CarouselItem>:
     cols: 2
     rows: 6
@@ -60,5 +72,11 @@
 
             MDCarousel:
                 id: carousel
+                loop: True
+                on_index:
+                    root.on_index(args[1])
 
+            Dots:
+                id: dots
+                y: "24dp"
 
