@@ -1,5 +1,6 @@
-from kivy.core.window import Window
+
 from kivymd.app import MDApp
+
 
 from core.screen_manager import WindowManager
 

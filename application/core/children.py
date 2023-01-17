@@ -1,6 +1,8 @@
 import sys
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManagerException
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
 from kivymd.uix.list import OneLineAvatarIconListItem, IconLeftWidget
 
 sys.path.append('database')
@@ -18,17 +20,43 @@ class Children(Screen):
         self.children_list = None
         self.list_elements = []
         self.child_screen = Child()
+        self.remove_child_dialog = None
 
     def on_enter(self, *args):
         self.children_list = vaccination_calendar.get_children()
 
         for child in self.children_list:
-            item = OneLineAvatarIconListItem(id=f"{child['id']}", text=f"{child['name']}", on_release=self.open_child)
-            item.add_widget(IconLeftWidget(icon=f"images/icons/numeric-{child['id']}.png"))
+            item = OneLineAvatarIconListItem(id=f"{child['id']}", text=f"{child['name']}", on_release=self.open_child,
+                                             on_icon_release=self.on_icon_release)
+            item.add_widget(
+                IconLeftWidget(id=f"{child['id']}", icon=f"delete", theme_text_color="Custom", text_color=(1, 0, 0, 1),
+                               on_release=self.on_icon_release))
             self.list_elements.append(item)
 
         for element in self.list_elements:
             self.ids.children_list.add_widget(element)
+
+    def on_icon_release(self, instance):
+        child_name = vaccination_calendar.get_child_name()
+        self.remove_child_dialog = MDDialog(
+            title="Usuń dziecko",
+            text=f"Czy aby na pewno chcesz usunąć dziecko: {child_name}",
+            font_name="application//fonts//static//OpenSans//OpenSans-ExtraBoldItalic.ttf",
+            buttons=[
+                MDFlatButton(
+                    text="Nie",
+                    on_release=self.close_dialog),
+                MDFlatButton(
+                    text="Tak",
+                    on_release=lambda child: self.remove_child(instance))])
+        self.remove_child_dialog.open()
+
+    def remove_child(self, obj):
+        vaccination_calendar.remove_child(obj.id)
+        self.remove_child_dialog.dismiss()
+
+    def close_dialog(self, obj):
+        self.remove_child_dialog.dismiss()
 
     def open_child(self, instance):
         self.child_screen.current_id = instance.id
