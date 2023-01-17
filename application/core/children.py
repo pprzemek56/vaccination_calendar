@@ -37,7 +37,7 @@ class Children(Screen):
             self.ids.children_list.add_widget(element)
 
     def on_icon_release(self, instance):
-        child_name = vaccination_calendar.get_child_name()
+        child_name = vaccination_calendar.get_child_name(instance.id)
         self.remove_child_dialog = MDDialog(
             title="Usuń dziecko",
             text=f"Czy aby na pewno chcesz usunąć dziecko: {child_name}",

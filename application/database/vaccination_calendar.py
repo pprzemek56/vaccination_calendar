@@ -102,6 +102,18 @@ def update_date(child_id, birth_date):
     execute_statement(statement, birth_date, child_id)
 
 
+def get_child_name(child_id):
+    statement = "select name from children where id = ?"
+
+    with sqlite3.connect("database/vaccination_calendar.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(statement, (child_id,))
+        fetched = cursor.fetchone()
+        name = fetched[0]
+
+    return name
+
+
 """
     Vaccination table methods
 """
@@ -234,7 +246,7 @@ def get_notifications(current_date):
 
     with sqlite3.connect("database/vaccination_calendar.db") as conn:
         cursor = conn.cursor()
-        cursor.execute(statement, (current_date, ))
+        cursor.execute(statement, (current_date,))
         fetched = cursor.fetchall()
         calendar_sheets = [{"name": v[0], "title": v[1], "finish_date": to_finish_date(v[2], v[6]),
                             "dose": v[3], "mandatory": v[4], "done": v[5], "notification_date": v[6]} for v in fetched]
