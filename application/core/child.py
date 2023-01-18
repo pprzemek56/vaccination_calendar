@@ -85,8 +85,8 @@ class Child(Screen):
         )
         self.ids.child_layout.add_widget(self.table)
 
-    def update(self, instance):
-        print("button pressed")
+    def update_done_row(self):
+        print(self.table.get_row_checks())
 
     def edit_name_btn(self):
         if self.ids.edit_name.ids.edit_btn.icon == "pencil-lock":

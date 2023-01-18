@@ -196,7 +196,7 @@ def get_vaccination_by_name(name):
 
 
 def get_child_vaccination(child_id):
-    statement = "select vaccinations.name, vaccinations.days_from, vaccinations.days_to, vaccinations.dose, done" \
+    statement = "select id, vaccinations.name, vaccinations.days_from, vaccinations.days_to, vaccinations.dose, done" \
                 " from vaccination_children" \
                 " inner join vaccinations" \
                 " on vaccination_children.vaccination_id = vaccinations.id" \
@@ -206,8 +206,8 @@ def get_child_vaccination(child_id):
         cursor = conn.cursor()
         cursor.execute(statement, child_id)
         fetched = cursor.fetchall()
-        vaccination_list = [{"name": v[0], "from": v[1], "to": v[2], "dose": v[3], "done": True if v[4] else False}
-                            for v in fetched]
+        vaccination_list = [{"id": v[0], "name": v[1], "from": v[2], "to": v[3], "dose": v[4],
+                             "done": True if v[5] else False} for v in fetched]
 
     return vaccination_list
 
