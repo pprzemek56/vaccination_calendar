@@ -1,4 +1,3 @@
-import calendar
 import sqlite3
 from datetime import date, timedelta, datetime
 
@@ -103,7 +102,7 @@ def update_date(child_id, birth_date):
 
 
 def get_child_name(child_id):
-    statement = "select name from children where id = ?"
+    statement = """select name from children where id = ?"""
 
     with sqlite3.connect("database/vaccination_calendar.db") as conn:
         cursor = conn.cursor()
@@ -112,6 +111,16 @@ def get_child_name(child_id):
         name = fetched[0]
 
     return name
+
+
+def remove_child(child_id):
+    statement = """delete from vaccination_children where child_id = ?"""
+
+    execute_statement(statement, child_id)
+
+    statement = """delete from children where id = ?"""
+
+    execute_statement(statement, child_id)
 
 
 """
