@@ -196,7 +196,8 @@ def get_vaccination_by_name(name):
 
 
 def get_child_vaccination(child_id):
-    statement = "select id, vaccinations.name, vaccinations.days_from, vaccinations.days_to, vaccinations.dose, done" \
+    statement = "select vaccination_children.id," \
+                " vaccinations.name, vaccinations.days_from, vaccinations.days_to, vaccinations.dose, done" \
                 " from vaccination_children" \
                 " inner join vaccinations" \
                 " on vaccination_children.vaccination_id = vaccinations.id" \
@@ -261,6 +262,17 @@ def get_notifications(current_date):
                             "dose": v[3], "mandatory": v[4], "done": v[5], "notification_date": v[6]} for v in fetched]
 
     return calendar_sheets
+
+
+def update_done_column(*args, **kwargs):
+    statement = """update vaccination_children set done = ? where """
+    for i, arg in enumerate(args):
+        if i == len(args) - 1:
+            statement += "id = ?"
+        else:
+            statement += "id = ? or "
+
+    execute_statement(statement, kwargs['done'], *args)
 
 
 def execute_statement(statement, *args):

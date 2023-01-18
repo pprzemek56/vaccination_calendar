@@ -72,21 +72,24 @@ class Child(Screen):
             rows_num=3,
             check=True,
             column_data=[
+                ("ID", dp(20)),
                 ("Szczepionka", dp(60)),
                 ("Zalecany czas szczepienia", dp(30)),
-                ("Dawka", dp(30)),
-                ("Odbyte", dp(30))],
+                ("Dawka", dp(15)),
+                ("Odbyte", dp(15))],
             row_data=[
-                (f"Szczepionka przeciw {vaccination['name']}",
+                (f"{vaccination['id']}",
+                f"Szczepionka przeciw {vaccination['name']}",
                  convert_time(vaccination["from"], vaccination["to"]),
                  convert_dose(vaccination["dose"]),
                  ("check-bold", [0, 1, 0, 1], "")
-                 if vaccination["done"] else ("close-thick", [1, 0, 0, 1], "")) for vaccination in vaccination_list]
-        )
+                 if vaccination["done"] else ("close-thick", [1, 0, 0, 1], "")) for vaccination in vaccination_list])
         self.ids.child_layout.add_widget(self.table)
 
     def update_done_row(self):
-        print(self.table.get_row_checks())
+        rows_for_update = self.table.get_row_checks()
+
+
 
     def edit_name_btn(self):
         if self.ids.edit_name.ids.edit_btn.icon == "pencil-lock":
