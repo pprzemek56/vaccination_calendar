@@ -45,7 +45,7 @@
                 orientation: "vertical"
                 spacing: "12dp"
                 size_hint_x: .6
-                pos_hint: {"center_x": .5, "center_y": .8}
+                pos_hint: {"center_x": .5, "center_y": .9}
                 adaptive_height: True
 
                 ClickableTextFieldRoundChild:
@@ -58,3 +58,15 @@
                 id: child_layout
                 spacing: "12dp"
                 padding: 20
+                pos_hint: {"center_x": .5, "center_y": .6}
+
+            MDFloatLayout:
+                id: button_update_layout
+                spacing: "12dp"
+                padding: 20
+                MDRoundFlatButton:
+                    text: "Aktualizuj"
+                    text_color: "white"
+                    font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+                    pos_hint: {"center_x": .5, "center_y": .05}
+                    on_release: root.update

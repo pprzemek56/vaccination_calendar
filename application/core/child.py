@@ -70,6 +70,7 @@ class Child(Screen):
             pos_hint={"center_x": .5, "center_y": .35},
             use_pagination=True,
             rows_num=3,
+            check=True,
             column_data=[
                 ("Szczepionka", dp(60)),
                 ("Zalecany czas szczepienia", dp(30)),
@@ -82,24 +83,10 @@ class Child(Screen):
                  ("check-bold", [0, 1, 0, 1], "")
                  if vaccination["done"] else ("close-thick", [1, 0, 0, 1], "")) for vaccination in vaccination_list]
         )
-        self.table.bind(on_row_press=self.press_row)
         self.ids.child_layout.add_widget(self.table)
 
-    def press_row(self, instance_table, instance_row):
-        # print(f"children = {instance_table.children}")
-        # print(f"column_data = {instance_table.column_data}")
-        # print(f"parent = {instance_table.parent}")
-        # print(f"properties = {instance_table.properties}")
-        # print(f"property = {instance_table.property}")
-        # print(f"row_data = {instance_table.row_data}")
-        # print(f"rows_num = {instance_table.rows_num}")
-        print(f"children = {instance_row.children}")
-        print(f"table = {instance_row.table}")
-        print(f"text = {instance_row.text}")
-        print(f"to_local = {instance_row.to_local}")
-        print(f"to_parent = {instance_row.to_parent}")
-
-
+    def update(self, instance):
+        print("button pressed")
 
     def edit_name_btn(self):
         if self.ids.edit_name.ids.edit_btn.icon == "pencil-lock":
