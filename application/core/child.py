@@ -40,13 +40,13 @@ class Child(Screen):
         self._child = child
 
     def on_enter(self, *args):
-        self.init_text_fileds()
+        self.init_text_fields()
         self.init_vaccination_table()
 
     def on_leave(self, *args):
         self.ids.child_layout.remove_widget(self.table)
 
-    def init_text_fileds(self):
+    def init_text_fields(self):
         self.child = vaccination_calendar.get_child(self.current_id)
         self.ids.edit_name.ids.text_field.text = self.child["name"]
         self.ids.edit_name.ids.text_field.icon_left = "account"
@@ -77,8 +77,8 @@ class Child(Screen):
                 ("Odbyte", dp(30))],
             row_data=[
                 (f"Szczepionka przeciw {vaccination['name']}",
-                 self.convert_time(vaccination["from"], vaccination["to"]),
-                 self.convert_dose(vaccination["dose"]),
+                 convert_time(vaccination["from"], vaccination["to"]),
+                 convert_dose(vaccination["dose"]),
                  ("check-bold", [0, 1, 0, 1], "")
                  if vaccination["done"] else ("close-thick", [1, 0, 0, 1], "")) for vaccination in vaccination_list]
         )
@@ -86,29 +86,19 @@ class Child(Screen):
         self.ids.child_layout.add_widget(self.table)
 
     def press_row(self, instance_table, instance_row):
-        pass
+        # print(f"children = {instance_table.children}")
+        # print(f"column_data = {instance_table.column_data}")
+        # print(f"parent = {instance_table.parent}")
+        # print(f"properties = {instance_table.properties}")
+        # print(f"property = {instance_table.property}")
+        # print(f"row_data = {instance_table.row_data}")
+        # print(f"rows_num = {instance_table.rows_num}")
+        print(f"children = {instance_row.children}")
+        print(f"table = {instance_row.table}")
+        print(f"text = {instance_row.text}")
+        print(f"to_local = {instance_row.to_local}")
+        print(f"to_parent = {instance_row.to_parent}")
 
-    def convert_time(self, start, end):
-        if end <= 1:
-            return f"Do 24h po narodzinach"
-
-        if start <= 450:
-            start_f = f"{int(start / 30) + 1} miesiąca"
-        else:
-            start_f = f"{int(start / 365)} roku"
-
-        if end <= 540:
-            end_f = f"{int(end / 30) + 1} miesiąca"
-        else:
-            end_f = f"{int(end / 365)} roku"
-
-        return f"Od {start_f}, do {end_f} życia"
-
-
-    def convert_dose(self, dose):
-        x, y = str(dose).split("/")
-
-        return f"{x} z {y}"
 
 
     def edit_name_btn(self):
@@ -166,7 +156,6 @@ class Child(Screen):
         self.ids.edit_name.ids.save_btn.disabled = True
         self.ids.edit_name.ids.edit_btn.icon = "pencil-lock"
 
-
     def save_date_btn(self):
         date = str(self.ids.edit_date.ids.text_field.text).strip()
 
@@ -176,3 +165,26 @@ class Child(Screen):
 
     def close_dialog(self, obj):
         self.dialog.dismiss()
+
+
+def convert_time(start, end):
+    if end <= 1:
+        return f"Do 24h po narodzinach"
+
+    if start <= 450:
+        start_f = f"{int(start / 30) + 1} miesiąca"
+    else:
+        start_f = f"{int(start / 365)} roku"
+
+    if end <= 540:
+        end_f = f"{int(end / 30) + 1} miesiąca"
+    else:
+        end_f = f"{int(end / 365)} roku"
+
+    return f"Od {start_f}, do {end_f} życia"
+
+
+def convert_dose(dose):
+    x, y = str(dose).split("/")
+
+    return f"{x} z {y}"

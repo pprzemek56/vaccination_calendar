@@ -41,7 +41,6 @@ class Children(Screen):
         self.remove_child_dialog = MDDialog(
             title="Usuń dziecko",
             text=f"Czy aby na pewno chcesz usunąć dziecko: {child_name}",
-            font_name="application//fonts//static//OpenSans//OpenSans-ExtraBoldItalic.ttf",
             buttons=[
                 MDFlatButton(
                     text="Nie",
