@@ -3,7 +3,7 @@ from datetime import date, timedelta, datetime
 
 
 def main():
-    pass
+    update_done_column(1, done=False)
 
 
 def create_vaccinations_table():
@@ -264,15 +264,10 @@ def get_notifications(current_date):
     return calendar_sheets
 
 
-def update_done_column(*args, **kwargs):
-    statement = """update vaccination_children set done = ? where """
-    for i, arg in enumerate(args):
-        if i == len(args) - 1:
-            statement += "id = ?"
-        else:
-            statement += "id = ? or "
+def update_done_column(vaccination_child_id, **kwargs):
+    statement = """update vaccination_children set done = ? where id = ?"""
 
-    execute_statement(statement, kwargs['done'], *args)
+    execute_statement(statement, kwargs['done'], vaccination_child_id)
 
 
 def execute_statement(statement, *args):
