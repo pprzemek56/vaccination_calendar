@@ -87,9 +87,7 @@ class Child(Screen):
         self.ids.child_layout.add_widget(self.table)
 
     def update_done_row(self):
-        print(self.table.get_row_checks())
         for row in self.table.get_row_checks():
-            print(row)
             if row[4] == "Tak":
                 vaccination_calendar.update_done_column(int(row[0]), done=False)
             else:
