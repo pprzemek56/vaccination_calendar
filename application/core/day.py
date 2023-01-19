@@ -72,7 +72,7 @@ class Day(Screen):
                 if vaccination['finish_date'] else
                 MDIcon(icon="close-thick", theme_text_color="Custom", text_color=(1, 0, 0, 1)))
             carousel_item.add_widget(MDLabel(text=f"Wykonane: "))
-            carousel_item.add_widget(MDIcon(icon="check-bold", theme_text_color="Custom", text_color=(0, 1, 0, 1))
+            carousel_item.add_widget(MDIcon( )
                                      if vaccination['done'] else
                                      MDIcon(icon="close-thick", theme_text_color="Custom", text_color=(1, 0, 0, 1)))
             self.ids.carousel.add_widget(carousel_item)

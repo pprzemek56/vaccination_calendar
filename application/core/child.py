@@ -43,6 +43,29 @@ class Child(Screen):
 
     def on_enter(self, *args):
         self.init_text_fields()
+        self.init_vaccination_child_list()
+
+    def init_vaccination_child_list(self):
+        vaccination_list = vaccination_calendar.get_child_vaccination(self.current_id)
+
+        for i, vaccination in enumerate(vaccination_list):
+            list_object = VaccinationChildListObject()
+            list_object.pos_hint = {"top": i * 0.2}
+            list_object.id = int(vaccination['id'])
+            list_object.ids.name.text = f"{vaccination['name']}"
+            list_object.ids.start.text = f"{vaccination['from']}"
+            list_object.ids.end.text = f"{vaccination['to']}"
+            list_object.ids.dose.text = f"{vaccination['dose']}"
+            if vaccination["done"]:
+                list_object.ids.done.icon = "check-bold"
+                list_object.ids.done.theme_text_color = "Custom"
+                list_object.ids.done.text_color = (0, 1, 0, 1)
+            else:
+                list_object.ids.done.icon = "close-thick"
+                list_object.ids.done.theme_text_color = "Custom"
+                list_object.ids.done.text_color = (1, 0, 0, 1)
+
+            self.ids.vaccination_children_list.add_widget(list_object)
 
 
     def init_text_fields(self):
