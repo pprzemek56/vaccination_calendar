@@ -41,8 +41,6 @@ class Child(Screen):
     def on_enter(self, *args):
         self.init_text_fields()
 
-    def on_leave(self, *args):
-        self.ids.child_layout.remove_widget(self.table)
 
     def init_text_fields(self):
         self.child = vaccination_calendar.get_child(self.current_id)

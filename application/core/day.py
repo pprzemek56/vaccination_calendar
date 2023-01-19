@@ -85,6 +85,6 @@ class Day(Screen):
     def on_index(self, index: int) -> None:
         for instance_dot in self.ids.dots.children:
             if instance_dot.index == index:
-                instance_dot.md_bg_color = "#2e8b2e"
+                instance_dot.md_bg_color = "#3f9c3f"
             else:
                 instance_dot.md_bg_color = "#90a390"
