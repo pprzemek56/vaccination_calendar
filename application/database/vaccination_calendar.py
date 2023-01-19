@@ -3,7 +3,7 @@ from datetime import date, timedelta, datetime
 
 
 def main():
-    update_done_column(1, done=False)
+    pass
 
 
 def create_vaccinations_table():

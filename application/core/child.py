@@ -87,20 +87,17 @@ class Child(Screen):
         self.ids.child_layout.add_widget(self.table)
 
     def update_done_row(self):
-        rows_for_update = self.table.get_row_checks()
-        done_id = ()
-        undone_id = ()
-
-        for row in rows_for_update:
+        print(self.table.get_row_checks())
+        for row in self.table.get_row_checks():
+            print(row)
             if row[4] == "Tak":
-                done_id += (int(row[0]), )
+                vaccination_calendar.update_done_column(int(row[0]), done=False)
             else:
-                undone_id += (int(row[0]),)
+                vaccination_calendar.update_done_column(int(row[0]), done=True)
 
-        vaccination_calendar.update_done_column(done_id, done=False)
-        vaccination_calendar.update_done_column(undone_id, done=True)
-
+        self.ids.child_layout.remove_widget(self.table)
         self.init_vaccination_table()
+
 
 
 
