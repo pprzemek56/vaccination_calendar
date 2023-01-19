@@ -21,7 +21,6 @@ class Child(Screen):
         self.current_id = None
         self.child = None
         self.dialog = None
-        self.table = None
 
     @property
     def current_id(self):
@@ -41,7 +40,6 @@ class Child(Screen):
 
     def on_enter(self, *args):
         self.init_text_fields()
-        self.init_vaccination_table()
 
     def on_leave(self, *args):
         self.ids.child_layout.remove_widget(self.table)
@@ -61,45 +59,6 @@ class Child(Screen):
         self.ids.edit_name.ids.edit_btn.icon = "pencil-lock"
         self.ids.edit_name.ids.text_field.disabled = True
         self.ids.edit_date.ids.text_field.disabled = True
-
-    def init_vaccination_table(self):
-        vaccination_list = vaccination_calendar.get_child_vaccination(self.current_id)
-
-        self.table = MDDataTable(
-            size_hint=(1, .7),
-            pos_hint={"center_x": .5, "center_y": .35},
-            use_pagination=True,
-            rows_num=3,
-            check=True,
-            column_data=[
-                ("ID", dp(20)),
-                ("Szczepionka", dp(60)),
-                ("Zalecany czas szczepienia", dp(30)),
-                ("Dawka", dp(15)),
-                ("Odbyte", dp(15))],
-            row_data=[
-                (f"{vaccination['id']}",
-                f"Szczepionka przeciw {vaccination['name']}",
-                 convert_time(vaccination["from"], vaccination["to"]),
-                 convert_dose(vaccination["dose"]),
-                 ("check-bold", [0, 1, 0, 1], "Tak")
-                 if vaccination["done"] else ("close-thick", [1, 0, 0, 1], "Nie")) for vaccination in vaccination_list])
-        self.ids.child_layout.add_widget(self.table)
-
-    def update_done_row(self):
-        print(self.table.get_row_checks())
-        for row in self.table.get_row_checks():
-            print(row)
-            if row[4] == "Tak":
-                vaccination_calendar.update_done_column(int(row[0]), done=False)
-            else:
-                vaccination_calendar.update_done_column(int(row[0]), done=True)
-
-        self.ids.child_layout.remove_widget(self.table)
-        self.init_vaccination_table()
-
-
-
 
     def edit_name_btn(self):
         if self.ids.edit_name.ids.edit_btn.icon == "pencil-lock":
