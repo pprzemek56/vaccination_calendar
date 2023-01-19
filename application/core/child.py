@@ -2,17 +2,20 @@ import re
 import sys
 
 from kivy.lang import Builder
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.button import MDFlatButton
-from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.pickers import MDDatePicker
-from kivy.metrics import dp
 
 sys.path.append('database')
 import vaccination_calendar
 
 Builder.load_file("layouts/child.kv")
+
+
+class VaccinationChildListObject(GridLayout):
+    pass
 
 
 class Child(Screen):

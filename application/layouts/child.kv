@@ -1,3 +1,26 @@
+<VaccinationChildListObject>:
+    cols: 6
+    rows: 1
+
+    MDLabel:
+        id: name
+
+    MDLabel:
+        id: start
+
+    MDLabel:
+        id: end
+
+    MDLabel:
+        id: dose
+
+    MDIconButton:
+        id: done
+
+    MDRectangleFlatButton:
+        id: notification_button
+        text: "Ustaw Przypomnienie"
+
 <ClickableTextFieldRoundChild@MDRelativeLayout>:
     size_hint_y: None
     height: text_field.height
@@ -53,3 +76,27 @@
 
                 ClickableTextFieldRoundChild:
                     id: edit_date
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint: .95, .7
+                pos_hint: {"center_x": .5}
+
+                canvas:
+                    Color:
+                        rgba: (0, 0, 0, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                    Color:
+                        rgba: (255/255, 255/255, 255/255, 1)
+                    RoundedRectangle:
+                        pos: self.x + 1.5, self.y + 1.5
+                        size: self.width - 3, self.height - 3
+                        radius: [15]
+
+                MDScrollView:
+
+                    MDList:
+                        id: vaccination_children_list
