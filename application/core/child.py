@@ -1,5 +1,6 @@
 import re
 import sys
+from datetime import datetime, timedelta, date
 
 from kivy.lang import Builder
 from kivy.uix.gridlayout import GridLayout
@@ -54,7 +55,7 @@ class Child(Screen):
             list_object.id = int(vaccination['id'])
             list_object.ids.name.text = f"{vaccination['name']}"
             list_object.ids.start.text = f"{vaccination['from']}"
-            list_object.ids.end.text = f"{vaccination['to']}"
+            list_object.ids.end.text = f"{convert_time(vaccination['from'], vaccination['to'])}"
             list_object.ids.dose.text = f"{vaccination['dose']}"
             if vaccination["done"]:
                 list_object.ids.done.icon = "check-bold"
@@ -151,23 +152,9 @@ class Child(Screen):
 
 
 def convert_time(start, end):
-    if end <= 1:
-        return f"Do 24h po narodzinach"
-
-    if start <= 450:
-        start_f = f"{int(start / 30) + 1} miesiąca"
-    else:
-        start_f = f"{int(start / 365)} roku"
-
-    if end <= 540:
-        end_f = f"{int(end / 30) + 1} miesiąca"
-    else:
-        end_f = f"{int(end / 365)} roku"
-
-    return f"Od {start_f}, do {end_f} życia"
+    datetime_date = datetime.combine(date.fromisoformat(start), datetime.min.time())
+    new_date = datetime_date + timedelta(days=end)
+    return date(new_date.year, new_date.month, new_date.day)
 
 
-def convert_dose(dose):
-    x, y = str(dose).split("/")
 
-    return f"{x} z {y}"
