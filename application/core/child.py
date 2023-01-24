@@ -3,10 +3,12 @@ import sys
 from datetime import datetime, timedelta, date
 
 from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import Screen
-from kivymd.uix.button import MDFlatButton
+from kivymd.uix.button import MDFlatButton, MDIconButton
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.label import MDLabel
 from kivymd.uix.pickers import MDDatePicker
 
 sys.path.append('database')
@@ -15,7 +17,7 @@ import vaccination_calendar
 Builder.load_file("layouts/child.kv")
 
 
-class VaccinationChildListObject(GridLayout):
+class VaccinationChildListObject(BoxLayout):
     pass
 
 
@@ -50,30 +52,23 @@ class Child(Screen):
 
     def init_vaccination_child_list(self):
         for i, vaccination in enumerate(self.vaccination_list):
-            list_object = VaccinationChildListObject()
-            list_object.pos_hint = {"top": i * 0.2}
-            if i == 0:
-                list_object.ids.name_label.text = "Szczepionka przeciw"
-                list_object.ids.start_label.text = "Początek"
-                list_object.ids.end_label.text = "Koniec"
-                list_object.ids.dose_label.text = "Dawka"
-                list_object.ids.done_label.text = "Odbyte"
-                list_object.ids.notification_label.text = "Przypomnienie"
-            list_object.id = int(vaccination['id'])
-            list_object.ids.name.text = f"{vaccination['name']}"
-            list_object.ids.start.text = f"{vaccination['from']}"
-            list_object.ids.end.text = f"{convert_time(vaccination['from'], vaccination['to'])}"
-            list_object.ids.dose.text = f"{vaccination['dose']}"
+            self.ids.box_scroll_view.add_widget(MDLabel(text=f"{vaccination['name']}"))
+            self.ids.box_scroll_view.add_widget(MDLabel(text=f"{vaccination['from']}"))
+            self.ids.box_scroll_view.add_widget(MDLabel(text=f"{convert_time(vaccination['from'], vaccination['to'])}"))
+            self.ids.box_scroll_view.add_widget(MDLabel(text=f"{vaccination['dose']}"))
             if vaccination["done"]:
-                list_object.ids.done.icon = "check-bold"
-                list_object.ids.done.theme_text_color = "Custom"
-                list_object.ids.done.text_color = (0, 1, 0, 1)
+                self.ids.box_scroll_view.add_widget(MDIconButton(id=self.current_id, icon="check-bold",
+                                                                 theme_text_color="Custom",
+                                                                 text_color=(0, 1, 0, 1),
+                                                                 on_release=self.change_vacc_status))
             else:
-                list_object.ids.done.icon = "close-thick"
-                list_object.ids.done.theme_text_color = "Custom"
-                list_object.ids.done.text_color = (1, 0, 0, 1)
+                self.ids.box_scroll_view.add_widget(MDIconButton(id=self.current_id, icon="close-thick",
+                                                                 theme_text_color="Custom",
+                                                                 text_color=(1, 0, 0, 1),
+                                                                 on_release=self.change_vacc_status))
 
-            self.ids.vaccination_children_list.add_widget(list_object)
+    def change_vacc_status(self, instance):
+        print("working")
 
 
     def init_text_fields(self):

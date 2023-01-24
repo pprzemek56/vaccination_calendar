@@ -1,56 +1,41 @@
 <VaccinationChildListObject>:
-    cols: 6
-    size_hint_y: None
+    # cols: 6
+    size_hint: None, None
+    width: 1000
     height: 80
     spacing: 20
     padding: 20
 
     MDLabel:
         id: name_label
-        size_hint: .25, 1
+        text: "Szczepienie przeciw"
+        # size_hint: .25, 1
 
     MDLabel:
         id: start_label
-        size_hint: .233, 1
+        text: "Początek"
+        # size_hint: .233, 1
 
     MDLabel:
         id: end_label
-        size_hint: .233, 1
+        text: "Koniec"
+        # size_hint: .233, 1
 
     MDLabel:
         id: dose_label
-        size_hint: .2, 1
+        text: "Dawka"
+        # size_hint: .2, 1
 
     MDLabel:
         id: done_label
-        size_hint: .1, 1
+        text: "Czy odbyte"
+        # size_hint: .1, 1
 
     MDLabel:
         id: notification_label
-        size_hint: .1, 1
+        text: "Powiadomienia"
+        # size_hint: .1, 1
 
-    MDLabel:
-        id: name
-        size_hint: .25, 1
-
-    MDLabel:
-        id: start
-        size_hint: .233, 1
-
-    MDLabel:
-        id: end
-        size_hint: .233, 1
-
-    MDLabel:
-        id: dose
-        size_hint: .2, 1
-
-    MDIconButton:
-        id: done
-
-    MDRectangleFlatButton:
-        id: notification_button
-        text: "Ustaw Przypomnienie"
 
 <ClickableTextFieldRoundChild@MDRelativeLayout>:
     size_hint_y: None
@@ -128,6 +113,38 @@
                         radius: [15]
 
                 MDScrollView:
+                    do_scroll_x: True
+                    do_scroll_y: True
 
-                    MDList:
-                        id: vaccination_children_list
+                    GridLayout:
+                        id: box_scroll_view
+                        cols: 5
+                        width: 800
+                        height: 2200
+                        size_hint: None, None
+                        spacing: 20
+                        padding: 20
+
+                        MDLabel:
+                            text: "Szczepienie przeciw"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        MDLabel:
+                            text: "Początek"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        MDLabel:
+                            text: "Koniec"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        MDLabel:
+                            text: "Dawka"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        MDLabel:
+                            text: "Czy odbyte"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        # MDLabel:
+                            # text: "Powiadomienia"
+                            # font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
