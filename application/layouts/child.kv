@@ -1,20 +1,49 @@
 <VaccinationChildListObject>:
     cols: 6
-    rows: 1
     size_hint_y: None
-    height: 40
+    height: 80
+    spacing: 20
+    padding: 20
+
+    MDLabel:
+        id: name_label
+        size_hint: .25, 1
+
+    MDLabel:
+        id: start_label
+        size_hint: .233, 1
+
+    MDLabel:
+        id: end_label
+        size_hint: .233, 1
+
+    MDLabel:
+        id: dose_label
+        size_hint: .2, 1
+
+    MDLabel:
+        id: done_label
+        size_hint: .1, 1
+
+    MDLabel:
+        id: notification_label
+        size_hint: .1, 1
 
     MDLabel:
         id: name
+        size_hint: .25, 1
 
     MDLabel:
         id: start
+        size_hint: .233, 1
 
     MDLabel:
         id: end
+        size_hint: .233, 1
 
     MDLabel:
         id: dose
+        size_hint: .2, 1
 
     MDIconButton:
         id: done

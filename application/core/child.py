@@ -25,6 +25,7 @@ class Child(Screen):
         self.current_id = None
         self.child = None
         self.dialog = None
+        self.vaccination_list = None
 
     @property
     def current_id(self):
@@ -43,15 +44,21 @@ class Child(Screen):
         self._child = child
 
     def on_enter(self, *args):
+        self.vaccination_list = vaccination_calendar.get_child_vaccination(self.current_id)
         self.init_text_fields()
         self.init_vaccination_child_list()
 
     def init_vaccination_child_list(self):
-        vaccination_list = vaccination_calendar.get_child_vaccination(self.current_id)
-
-        for i, vaccination in enumerate(vaccination_list):
+        for i, vaccination in enumerate(self.vaccination_list):
             list_object = VaccinationChildListObject()
             list_object.pos_hint = {"top": i * 0.2}
+            if i == 0:
+                list_object.ids.name_label.text = "Szczepionka przeciw"
+                list_object.ids.start_label.text = "Początek"
+                list_object.ids.end_label.text = "Koniec"
+                list_object.ids.dose_label.text = "Dawka"
+                list_object.ids.done_label.text = "Odbyte"
+                list_object.ids.notification_label.text = "Przypomnienie"
             list_object.id = int(vaccination['id'])
             list_object.ids.name.text = f"{vaccination['name']}"
             list_object.ids.start.text = f"{vaccination['from']}"
