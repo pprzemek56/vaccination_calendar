@@ -2,14 +2,10 @@ import sys
 from datetime import date
 
 from kivy.app import App
-from kivy.core.window import Window, Animation
-from kivy.graphics import Color, Rectangle, Line
 from kivy.lang import Builder
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.carousel import MDCarousel
 from kivymd.uix.label import MDLabel, MDIcon
 
 sys.path.append('database')
@@ -72,9 +68,10 @@ class Day(Screen):
                 if vaccination['finish_date'] else
                 MDIcon(icon="close-thick", theme_text_color="Custom", text_color=(1, 0, 0, 1)))
             carousel_item.add_widget(MDLabel(text=f"Wykonane: "))
-            carousel_item.add_widget(MDIcon(icon="check-bold", theme_text_color="Custom", text_color=(0, 1, 0, 1))
-                                     if vaccination['done'] else
-                                     MDIcon(icon="close-thick", theme_text_color="Custom", text_color=(1, 0, 0, 1)))
+            carousel_item.add_widget(
+                MDIcon(icon="check-bold", theme_text_color="Custom", text_color=(0, 1, 0, 1), pos_hint={"center_x": 1})
+                if vaccination['done'] else
+                MDIcon(icon="close-thick", theme_text_color="Custom", text_color=(1, 0, 0, 1)))
             self.ids.carousel.add_widget(carousel_item)
 
     def on_leave(self, *args):
@@ -85,6 +82,6 @@ class Day(Screen):
     def on_index(self, index: int) -> None:
         for instance_dot in self.ids.dots.children:
             if instance_dot.index == index:
-                instance_dot.md_bg_color = "#2e8b2e"
+                instance_dot.md_bg_color = "#3f9c3f"
             else:
                 instance_dot.md_bg_color = "#90a390"

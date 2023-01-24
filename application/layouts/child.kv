@@ -54,19 +54,58 @@
                 ClickableTextFieldRoundChild:
                     id: edit_date
 
-            MDBoxLayout:
-                id: child_layout
-                spacing: "12dp"
-                padding: 20
-                pos_hint: {"center_x": .5, "center_y": .6}
+            BoxLayout:
+                orientation: "vertical"
+                size_hint: .95, .7
+                pos_hint: {"center_x": .5}
 
-            MDFloatLayout:
-                id: button_update_layout
-                spacing: "12dp"
-                padding: 20
-                MDRoundFlatButton:
-                    text: "Aktualizuj"
-                    text_color: "white"
-                    font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
-                    pos_hint: {"center_x": .5, "center_y": .05}
-                    on_release: root.update_done_row()
+                canvas:
+                    Color:
+                        rgba: (0, 0, 0, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                    Color:
+                        rgba: (255/255, 255/255, 255/255, 1)
+                    RoundedRectangle:
+                        pos: self.x + 1.5, self.y + 1.5
+                        size: self.width - 3, self.height - 3
+                        radius: [15]
+
+                MDScrollView:
+                    do_scroll_x: True
+                    do_scroll_y: True
+
+                    GridLayout:
+                        id: box_scroll_view
+                        cols: 5
+                        width: 800
+                        height: 2200
+                        size_hint: None, None
+                        spacing: 20
+                        padding: 20
+
+                        MDLabel:
+                            text: "Szczepienie przeciw"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        MDLabel:
+                            text: "Początek"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        MDLabel:
+                            text: "Koniec"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        MDLabel:
+                            text: "Dawka"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        MDLabel:
+                            text: "Czy odbyte"
+                            font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"
+
+                        # MDLabel:
+                            # text: "Powiadomienia"
+                            # font_name: "fonts/static/OpenSans/OpenSans-Bold.ttf"

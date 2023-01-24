@@ -196,8 +196,9 @@ def get_vaccination_by_name(name):
 
 
 def get_child_vaccination(child_id):
-    statement = "select vaccination_children.id," \
-                " vaccinations.name, vaccinations.days_from, vaccinations.days_to, vaccinations.dose, done" \
+    statement = "select vaccination_children.id, vaccinations.name," \
+                " vaccination_children.notification_date, vaccinations.days_from, " \
+                "vaccinations.days_to, vaccinations.dose, done" \
                 " from vaccination_children" \
                 " inner join vaccinations" \
                 " on vaccination_children.vaccination_id = vaccinations.id" \
@@ -207,8 +208,8 @@ def get_child_vaccination(child_id):
         cursor = conn.cursor()
         cursor.execute(statement, child_id)
         fetched = cursor.fetchall()
-        vaccination_list = [{"id": v[0], "name": v[1], "from": v[2], "to": v[3], "dose": v[4],
-                             "done": True if v[5] else False} for v in fetched]
+        vaccination_list = [{"id": v[0], "name": v[1], "from": v[2], "to": int(v[4]) - int(v[3]), "dose": v[5],
+                             "done": True if v[6] else False} for v in fetched]
 
     return vaccination_list
 
@@ -225,7 +226,7 @@ def insert_into_vaccination_children(child_id):
 
 def get_notification(first_date, last_date):
     statement = """select children.name, vaccinations.name, vaccinations.days_to, vaccinations.dose,
-                            vaccinations.mandatory, done, notification_date  
+                            vaccinations.mandatory, done, notification_date, children.birth_date  
                     from vaccination_children
                     inner join children
                     on vaccination_children.child_id = children.id
@@ -238,7 +239,7 @@ def get_notification(first_date, last_date):
         cursor = conn.cursor()
         cursor.execute(statement, (first_date, last_date))
         fetched = cursor.fetchall()
-        calendar_sheets = [{"name": v[0], "title": v[1], "finish_date": to_finish_date(v[2], v[6]),
+        calendar_sheets = [{"name": v[0], "title": v[1], "finish_date": to_finish_date(v[2], v[7]),
                             "dose": v[3], "mandatory": v[4], "done": v[5], "notification_date": v[6]} for v in fetched]
 
     return calendar_sheets
@@ -246,7 +247,7 @@ def get_notification(first_date, last_date):
 
 def get_notifications(current_date):
     statement = """select children.name, vaccinations.name, vaccinations.days_to, vaccinations.dose,
-                            vaccinations.mandatory, done, notification_date  
+                            vaccinations.mandatory, done, notification_date, children.birth_date  
                     from vaccination_children
                     inner join children
                     on vaccination_children.child_id = children.id
@@ -258,7 +259,7 @@ def get_notifications(current_date):
         cursor = conn.cursor()
         cursor.execute(statement, (current_date,))
         fetched = cursor.fetchall()
-        calendar_sheets = [{"name": v[0], "title": v[1], "finish_date": to_finish_date(v[2], v[6]),
+        calendar_sheets = [{"name": v[0], "title": v[1], "finish_date": to_finish_date(v[2], v[7]),
                             "dose": v[3], "mandatory": v[4], "done": v[5], "notification_date": v[6]} for v in fetched]
 
     return calendar_sheets
@@ -282,8 +283,8 @@ def execute_statement(statement, *args):
             conn.commit()
 
 
-def to_finish_date(days, start_date):
-    finish_datetime = datetime.combine(date.fromisoformat(start_date), datetime.min.time()) + timedelta(days=days)
+def to_finish_date(days, date_of_birth):
+    finish_datetime = datetime.combine(date.fromisoformat(date_of_birth), datetime.min.time()) + timedelta(days=days)
     return finish_datetime.date()
 
 
