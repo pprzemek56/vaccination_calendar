@@ -2,14 +2,10 @@ import sys
 from datetime import date
 
 from kivy.app import App
-from kivy.core.window import Window, Animation
-from kivy.graphics import Color, Rectangle, Line
 from kivy.lang import Builder
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.carousel import MDCarousel
 from kivymd.uix.label import MDLabel, MDIcon
 
 sys.path.append('database')

@@ -4,7 +4,6 @@ from datetime import datetime, timedelta, date
 
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.button import MDFlatButton, MDIconButton
 from kivymd.uix.dialog import MDDialog
@@ -154,9 +153,9 @@ class Child(Screen):
         self.ids.edit_name.ids.edit_btn.icon = "pencil-lock"
 
     def save_date_btn(self):
-        date = str(self.ids.edit_date.ids.text_field.text).strip()
+        save_date = str(self.ids.edit_date.ids.text_field.text).strip()
 
-        vaccination_calendar.update_date(self.child["id"], date)
+        vaccination_calendar.update_date(self.child["id"], save_date)
         self.ids.edit_date.ids.save_btn.disabled = True
         self.ids.edit_date.ids.edit_btn.icon = "pencil-lock"
 
