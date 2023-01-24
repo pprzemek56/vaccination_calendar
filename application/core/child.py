@@ -166,11 +166,11 @@ class Child(Screen):
 
 def change_vacc_status(instance):
     if instance.icon == "check-bold":
-        vaccination_calendar.update_done_column(int(instance.id), False)
+        vaccination_calendar.update_done_column(int(instance.id), done=False)
         instance.icon = "close-thick"
         instance.text_color = (1, 0, 0, 1)
     else:
-        vaccination_calendar.update_done_column(int(instance.id), True)
+        vaccination_calendar.update_done_column(int(instance.id), done=True)
         instance.icon = "check-bold"
         instance.text_color = (0, 1, 0, 1)
 
