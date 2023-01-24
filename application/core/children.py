@@ -52,6 +52,10 @@ class Children(Screen):
 
     def remove_child(self, obj):
         vaccination_calendar.remove_child(obj.id)
+        for element in self.list_elements:
+            if element.id == obj.id:
+                self.list_elements.remove(element)
+                self.ids.children_list.remove_widget(element)
         self.remove_child_dialog.dismiss()
 
     def close_dialog(self, obj):
