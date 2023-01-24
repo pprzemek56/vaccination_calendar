@@ -16,9 +16,6 @@ import vaccination_calendar
 Builder.load_file("layouts/child.kv")
 
 
-class VaccinationChildListObject(BoxLayout):
-    pass
-
 
 class Child(Screen):
     def __init__(self, **kwargs):
