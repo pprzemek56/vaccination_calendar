@@ -28,6 +28,7 @@ class Child(Screen):
         self.child = None
         self.dialog = None
         self.vaccination_list = None
+        self.to_remove = []
 
     @property
     def current_id(self):
@@ -50,26 +51,36 @@ class Child(Screen):
         self.init_text_fields()
         self.init_vaccination_child_list()
 
+    def on_leave(self, *args):
+        for widget in self.to_remove:
+            self.ids.box_scroll_view.remove_widget(widget)
+
     def init_vaccination_child_list(self):
         for i, vaccination in enumerate(self.vaccination_list):
-            self.ids.box_scroll_view.add_widget(MDLabel(text=f"{vaccination['name']}"))
-            self.ids.box_scroll_view.add_widget(MDLabel(text=f"{vaccination['from']}"))
-            self.ids.box_scroll_view.add_widget(MDLabel(text=f"{convert_time(vaccination['from'], vaccination['to'])}"))
-            self.ids.box_scroll_view.add_widget(MDLabel(text=f"{vaccination['dose']}"))
+            label = MDLabel(text=f"{vaccination['name']}")
+            self.ids.box_scroll_view.add_widget(label)
+            self.to_remove.append(label)
+            label = MDLabel(text=f"{vaccination['from']}")
+            self.ids.box_scroll_view.add_widget(label)
+            self.to_remove.append(label)
+            label = MDLabel(text=f"{convert_time(vaccination['from'], vaccination['to'])}")
+            self.ids.box_scroll_view.add_widget(label)
+            self.to_remove.append(label)
+            label = MDLabel(text=f"{vaccination['dose']}")
+            self.ids.box_scroll_view.add_widget(label)
+            self.to_remove.append(label)
             if vaccination["done"]:
-                self.ids.box_scroll_view.add_widget(MDIconButton(id=self.current_id, icon="check-bold",
-                                                                 theme_text_color="Custom",
-                                                                 text_color=(0, 1, 0, 1),
-                                                                 on_release=self.change_vacc_status))
+                button = MDIconButton(id=f"{vaccination['id']}", icon="check-bold",
+                                      theme_text_color="Custom",
+                                      text_color=(0, 1, 0, 1),
+                                      on_release=change_vacc_status)
             else:
-                self.ids.box_scroll_view.add_widget(MDIconButton(id=self.current_id, icon="close-thick",
-                                                                 theme_text_color="Custom",
-                                                                 text_color=(1, 0, 0, 1),
-                                                                 on_release=self.change_vacc_status))
-
-    def change_vacc_status(self, instance):
-        print("working")
-
+                button = MDIconButton(id=f"{vaccination['id']}", icon="close-thick",
+                                      theme_text_color="Custom",
+                                      text_color=(1, 0, 0, 1),
+                                      on_release=change_vacc_status)
+            self.ids.box_scroll_view.add_widget(button)
+            self.to_remove.append(button)
 
     def init_text_fields(self):
         self.child = vaccination_calendar.get_child(self.current_id)
@@ -153,10 +164,18 @@ class Child(Screen):
         self.dialog.dismiss()
 
 
+def change_vacc_status(instance):
+    if instance.icon == "check-bold":
+        vaccination_calendar.update_done_column(int(instance.id), False)
+        instance.icon = "close-thick"
+        instance.text_color = (1, 0, 0, 1)
+    else:
+        vaccination_calendar.update_done_column(int(instance.id), True)
+        instance.icon = "check-bold"
+        instance.text_color = (0, 1, 0, 1)
+
+
 def convert_time(start, end):
     datetime_date = datetime.combine(date.fromisoformat(start), datetime.min.time())
     new_date = datetime_date + timedelta(days=end)
     return date(new_date.year, new_date.month, new_date.day)
-
-
-
